@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [Form].
-
 void main() => runApp(const FormExampleApp());
 
 class FormExampleApp extends StatelessWidget {
@@ -11,7 +9,7 @@ class FormExampleApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(title: const Text('Form Sample')),
+        appBar: AppBar(title: const Text('Cadastrar tarefa')),
         body: const FormExample(),
       ),
     );
@@ -92,8 +90,8 @@ class _FormExampleState extends State<FormExample> {
             errorInvalidText: "Digie uma data entre 2019 e 2025",   
             fieldHintText: "Escreva uma data no formato dd/mm/yyyy",
             fieldLabelText: "Escreva uma data no formato dd/mm/yyyy",
-            firstDate: DateTime(2019),
-            lastDate: DateTime(2025),
+            firstDate: DateTime(DateTime.now().year-1000),
+            lastDate: DateTime(DateTime.now().year+1000),
             initialDate: _deliveryDateProject,
             onDateSubmitted: (date) {
               setState(() {
@@ -106,8 +104,8 @@ class _FormExampleState extends State<FormExample> {
             errorInvalidText: "Digie uma data entre 2019 e 2025",
             fieldHintText: "Escreva uma data no formato dd/mm/yyyy",
             fieldLabelText: "Escreva uma data no formato dd/mm/yyyy",
-            firstDate: DateTime(2019),
-            lastDate: DateTime(2025),
+            firstDate: DateTime(DateTime.now().year-1000),
+            lastDate: DateTime(DateTime.now().year+1000),
             initialDate: _deadlineDateProject,
             onDateSubmitted: (date) {
               setState(() {
@@ -124,7 +122,7 @@ class _FormExampleState extends State<FormExample> {
                   // Process data.
                 }
               },
-              child: const Text('Submit'),
+              child: const Text('Cadastrar'),
             ),
           ),
         ],
