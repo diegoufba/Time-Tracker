@@ -34,5 +34,7 @@ class Project{
   }
 
   String get name => _name;
+
+   List<Task> get tasks => _tasks;
    
 }

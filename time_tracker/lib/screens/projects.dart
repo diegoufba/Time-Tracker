@@ -9,13 +9,10 @@ class ProjectsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     final List<Project> projects = ref.watch(projectsProvider);
 
     return Column(
       children: [
-        const Text("TESTE"),
-        Text("Size: ${projects.length}"),
         ListView.builder(
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
@@ -23,18 +20,23 @@ class ProjectsScreen extends ConsumerWidget {
             itemBuilder: (context, index) {
               return ListTile(
                   title: Text(projects.elementAt(index).name),
-                  onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ProjectDetailsScreen(
-                              project: projects.elementAt(index)))));
+                  onTap: (){
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ProjectDetailsScreen(
+                                    project: projects.elementAt(index))));
+                      });
             }),
-            ElevatedButton(onPressed: (){
-              projects.add(Project("Projeto Adicionado", null, null, null, null, null, null, null, null));
+        Text("Total de projetos: ${projects.length}"),
+        ElevatedButton(
+            onPressed: () {
+              projects.add(Project("Projeto Adicionado", null, null, null, null,
+                  null, null, null, null));
               final List<Project> projetosDeepCopy = List.from(projects);
               ref.read(projectsProvider.notifier).state = projetosDeepCopy;
-              },
-             child: const Text("Adicionar"))
+            },
+            child: const Text("Adicionar Projeto"))
       ],
     );
   }

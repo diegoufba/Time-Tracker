@@ -14,4 +14,6 @@ class Task {
     _isCompleted = !_isCompleted;
   }
 
+  String get name => _title;
+
 }
