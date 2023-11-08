@@ -1,5 +1,5 @@
 class Task {
-  String? _title;
+  String? _name;
   DateTime? _initialDate;
   DateTime? _finalDate;
   String? _hour;
