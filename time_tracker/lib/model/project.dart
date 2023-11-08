@@ -32,5 +32,7 @@ class Project{
   int getNumberOfTaks(){
     return _tasks.length;
   }
+
+  String get name => _name;
    
 }
