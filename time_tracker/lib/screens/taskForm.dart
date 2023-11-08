@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+
 void main() => runApp(const FormExampleApp());
 
 class FormExampleApp extends StatelessWidget {
@@ -9,7 +10,7 @@ class FormExampleApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(title: const Text('Cadastrar tarefa')),
+        appBar: AppBar(title: const Text('Cadastrar Tarefa')),
         body: const FormExample(),
       ),
     );
@@ -25,12 +26,9 @@ class FormExample extends StatefulWidget {
 
 class _FormExampleState extends State<FormExample> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  String? _projectName;
-  double? _priceProject;
-  DateTime?  _deliveryDateProject;
-  DateTime? _deadlineDateProject;
-  double? _estimatedTimeProject;
-  
+  String? _taskName;
+  DateTime?  _initialDateTask;
+  DateTime? _finalDateTask;
   
   @override
   Widget build(BuildContext context) {
@@ -41,75 +39,41 @@ class _FormExampleState extends State<FormExample> {
         children: <Widget>[
           TextFormField(
             decoration: const InputDecoration(
-              hintText: 'Digite o nome do seu Projeto',
+              hintText: 'Digite o nome da sua Tarefa',
             ),
             validator: (String? value) {
               if (value == null || value.isEmpty) {
                 return 'Por favor, digite um nome';
               }
-             _projectName = value;
+             _taskName = value;
              return null;
-            },
-          ),
-          TextFormField(
-            decoration: const InputDecoration(
-              hintText: 'Digite o preço do seu Projeto',
-            ),
-            keyboardType: TextInputType.number,
-            validator: (value) {
-            if (value==null || value.isEmpty) {
-              return 'Por favor, digite um preço';
-            }
-            double? aux = double.tryParse(value);
-            if (aux == null || aux <= 0) {
-              return 'Por favor, digite um preço válido';
-              }
-              _priceProject = aux;
-              return null;
-            },
-          ),
-          TextFormField(
-            decoration: const InputDecoration(
-              hintText: 'Digite o tempo estimado do seu Projeto',
-            ),
-            keyboardType: TextInputType.number,
-            validator: (value) {
-            if (value==null || value.isEmpty) {
-              return 'Por favor, digite um tempo ';
-            }
-            double? aux = double.tryParse(value);
-            if (aux == null || aux <= 0) {
-              return 'Por favor, digite um tempo válido';
-              }
-              _estimatedTimeProject = aux;
-              return null;
             },
           ),
           InputDatePickerFormField(
             errorFormatText: "Digite um formato válido",
             errorInvalidText: "Digie uma data entre 2019 e 2025",   
-            fieldHintText: "Escreva uma data no formato dd/mm/yyyy",
-            fieldLabelText: "Escreva uma data no formato dd/mm/yyyy",
+            fieldHintText: "Escreva uma data inicial para a tarefa no formato dd/mm/yyyy",
+            fieldLabelText: "Escreva uma data inicial para a tarefa no formato dd/mm/yyyy",
             firstDate: DateTime(DateTime.now().year-1000),
             lastDate: DateTime(DateTime.now().year+1000),
-            initialDate: _deliveryDateProject,
+            initialDate: _initialDateTask,
             onDateSubmitted: (date) {
               setState(() {
-                _deliveryDateProject = date;
+                _initialDateTask = date;
               });
             },
           ),
           InputDatePickerFormField(
             errorFormatText: "Digite um formato válido",
-            errorInvalidText: "Digie uma data entre 2019 e 2025",
-            fieldHintText: "Escreva uma data no formato dd/mm/yyyy",
-            fieldLabelText: "Escreva uma data no formato dd/mm/yyyy",
+            errorInvalidText: "Digie uma data entre 1500 e 3800",
+            fieldHintText: "Escreva uma data final para a tarefa no formato dd/mm/yyyy",
+            fieldLabelText: "Escreva uma data final para a tarefa no formato dd/mm/yyyy",
             firstDate: DateTime(DateTime.now().year-1000),
             lastDate: DateTime(DateTime.now().year+1000),
-            initialDate: _deadlineDateProject,
+            initialDate: _finalDateTask,
             onDateSubmitted: (date) {
               setState(() {
-                _deadlineDateProject = date;
+                _finalDateTask = date;
               });
             },
           ), 
