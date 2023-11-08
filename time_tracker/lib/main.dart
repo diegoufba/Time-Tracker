@@ -12,7 +12,7 @@ final projectsProvider = StateProvider((ref) => [
     Project("Projeto C", null, null, null, null, null, null, null, null),
     Project("Projeto D", null, null, null, null, null, null, null, null),
     Project("Projeto E", null, null, null, null, null, null, null, 
-      [Task("Taf A", DateTime.now(), DateTime.now(), "12", false), Task("Taf B", DateTime.now(), DateTime.now(), "5", true)]),
+      [Task("Taf A", DateTime.now(), DateTime.now(), 12, false), Task("Taf B", DateTime.now(), DateTime.now(), 5, true)]),
 ]);
 
 class MyApp extends ConsumerWidget {

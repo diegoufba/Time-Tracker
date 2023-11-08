@@ -51,7 +51,7 @@ class _FormExampleState extends State<FormExample> {
           ),
           InputDatePickerFormField(
             errorFormatText: "Digite um formato válido",
-            errorInvalidText: "Digie uma data entre 2019 e 2025",   
+            errorInvalidText: "Digite uma data entre 2019 e 2025",   
             fieldHintText: "Escreva uma data inicial para a tarefa no formato dd/mm/yyyy",
             fieldLabelText: "Escreva uma data inicial para a tarefa no formato dd/mm/yyyy",
             firstDate: DateTime(DateTime.now().year-1000),

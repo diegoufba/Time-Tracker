@@ -1,12 +1,12 @@
 class Task {
-  String? _name;
+  String _name;
   DateTime? _initialDate;
   DateTime? _finalDate;
   double? _hour;
   bool _isCompleted = false;
 
 
-  Task(this._title, this._initialDate, this._finalDate, this._hour, bool? isCompleted){
+  Task(this._name, this._initialDate, this._finalDate, this._hour, bool? isCompleted){
     _isCompleted = isCompleted ?? false;
   }
 
@@ -14,6 +14,6 @@ class Task {
     _isCompleted = !_isCompleted;
   }
 
-  String get name => _title;
+  String get name => _name;
 
 }
