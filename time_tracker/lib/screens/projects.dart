@@ -19,7 +19,7 @@ class ProjectsScreen extends ConsumerWidget {
             itemCount: projects.length,
             itemBuilder: (context, index) {
               return ListTile(
-                  title: Text(projects.elementAt(index).name),
+                  title: Center(child: Text(projects.elementAt(index).name)),
                   onTap: (){
                         Navigator.push(
                             context,
