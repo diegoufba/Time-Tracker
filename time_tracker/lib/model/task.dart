@@ -1,8 +1,8 @@
 class Task {
-  final String _title;
-  final DateTime _initialDate;
-  final DateTime _finalDate;
-  String _hour;
+  String? _title;
+  DateTime? _initialDate;
+  DateTime? _finalDate;
+  String? _hour;
   bool _isCompleted = false;
 
 
