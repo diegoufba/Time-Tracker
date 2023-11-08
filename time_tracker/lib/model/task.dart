@@ -2,7 +2,7 @@ class Task {
   String? _name;
   DateTime? _initialDate;
   DateTime? _finalDate;
-  String? _hour;
+  double? _hour;
   bool _isCompleted = false;
 
 
