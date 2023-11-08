@@ -7,12 +7,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 void main() => runApp(const ProviderScope(child: MyApp()));
 
 final projectsProvider = StateProvider((ref) => [
-    Project("Projeto A", null, null, null, null, null, null, null, null),
-    Project("Projeto B", null, null, null, null, null, null, null, null),
-    Project("Projeto C", null, null, null, null, null, null, null, null),
-    Project("Projeto D", null, null, null, null, null, null, null, null),
-    Project("Projeto E", null, null, null, null, null, null, null, 
-      [Task("Taf A", DateTime.now(), DateTime.now(), 12, false), Task("Taf B", DateTime.now(), DateTime.now(), 5, true)]),
+    Project("Desenvolvimento App mobile", 1300, null, DateTime.parse("2023-11-30"), 30, 72, false, false, 
+      [Task("Definir Telas", DateTime.parse("2023-09-20"), DateTime.parse("2023-09-30"), 12, true),
+       Task("Desenvolver Telas", DateTime.parse("2023-10-10"), DateTime.parse("2023-11-30"), 48, false)
+      ]
+    ),
+    Project("Criação Sistema Web", 80, null, DateTime.parse("2023-12-25"), 102, 306, false, true, 
+      [Task("Criação de rotas", DateTime.parse("2023-09-20"), DateTime.parse("2023-09-30"), 15, true),
+      ]
+    ),
+    Project("Mapeamento Relacional de Negócio", 1200, DateTime.parse("2023-11-20"), DateTime.parse("2023-11-21"), 50, 60, true, false, null),
 ]);
 
 class MyApp extends ConsumerWidget {

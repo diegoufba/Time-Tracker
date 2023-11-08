@@ -17,7 +17,6 @@ class ProjectForm extends ConsumerWidget {
     bool projectHourlyRated = false;
     List<String> chargeOptions = ["Valor fixo", "Por hora"];
 
-    //  final List<Project> projects = ref.watch(projectsProvider);
     return Scaffold(
         appBar: AppBar(title: const Text('Cadastrar Projeto')),
         body: Form(
@@ -57,7 +56,7 @@ class ProjectForm extends ConsumerWidget {
               const SizedBox(height: 20),
               DropdownMenu(
                   initialSelection: chargeOptions.first,
-                  label: Text("Tipo de cobrança"),
+                  label: const Text("Tipo de cobrança"),
                   onSelected: (value) => {
                         value == "Por hora"
                             ? projectHourlyRated = true
