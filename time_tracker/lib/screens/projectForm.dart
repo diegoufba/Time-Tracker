@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:time_tracker/main.dart';
 import 'package:time_tracker/model/project.dart';
 
@@ -8,6 +9,7 @@ class ProjectForm extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final intitialDateController = TextEditingController();
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
     String projectName = "";
     double priceProject = 0;
@@ -16,6 +18,7 @@ class ProjectForm extends ConsumerWidget {
     double estimatedTimeProject = 0;
     bool projectHourlyRated = false;
     List<String> chargeOptions = ["Valor fixo", "Por hora"];
+    DateTime timeNow = DateTime.now();
 
     return Scaffold(
         appBar: AppBar(title: const Text('Cadastrar Projeto')),
@@ -26,7 +29,7 @@ class ProjectForm extends ConsumerWidget {
             children: <Widget>[
               TextFormField(
                 decoration: const InputDecoration(
-                  hintText: 'Digite o nome do seu Projeto',
+                  hintText: 'Nome do projeto',
                 ),
                 validator: (String? value) {
                   if (value == null || value.isEmpty) {
@@ -38,7 +41,7 @@ class ProjectForm extends ConsumerWidget {
               ),
               TextFormField(
                 decoration: const InputDecoration(
-                  hintText: 'Digite o preço do seu Projeto',
+                  hintText: 'Preço do Projeto',
                 ),
                 keyboardType: TextInputType.number,
                 validator: (value) {
@@ -50,6 +53,23 @@ class ProjectForm extends ConsumerWidget {
                     return 'Por favor, digite um preço válido';
                   }
                   priceProject = aux;
+                  return null;
+                },
+              ),
+              TextFormField(
+                decoration: const InputDecoration(
+                  hintText: 'Tempo estimado (em horas)',
+                ),
+                keyboardType: TextInputType.number,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor, digite um tempo ';
+                  }
+                  double? aux = double.tryParse(value);
+                  if (aux == null || aux <= 0) {
+                    return 'Por favor, digite um tempo válido';
+                  }
+                  estimatedTimeProject = aux;
                   return null;
                 },
               ),
@@ -67,45 +87,31 @@ class ProjectForm extends ConsumerWidget {
                     return DropdownMenuEntry<String>(
                         value: value, label: value);
                   }).toList()),
+              const SizedBox(height: 20),
               TextFormField(
+                controller: intitialDateController,
                 decoration: const InputDecoration(
-                  hintText: 'Digite o tempo estimado do seu Projeto',
+                  border: OutlineInputBorder(),
+                  labelText: 'Prazo',
                 ),
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor, digite um tempo ';
+                readOnly: true,
+                onTap: () async {
+                  DateTime? newDate = await showDatePicker(
+                      context: context,
+                      initialDate: timeNow,
+                      firstDate: timeNow,
+                      cancelText: "Cancelar",
+                      helpText: "Escolha o prazo",
+                      errorFormatText: "Formato inválido",
+                      errorInvalidText: "Texto inválido",
+                      locale: const Locale('pt', 'BR'),
+                      lastDate: DateTime(timeNow.year + 10));
+                  if (newDate != null) {
+                    String formattedDate =
+                        DateFormat('dd/MM/yyyy').format(newDate);
+                    deliveryDateProject = newDate;
+                    intitialDateController.text = formattedDate;
                   }
-                  double? aux = double.tryParse(value);
-                  if (aux == null || aux <= 0) {
-                    return 'Por favor, digite um tempo válido';
-                  }
-                  estimatedTimeProject = aux;
-                  return null;
-                },
-              ),
-              InputDatePickerFormField(
-                errorFormatText: "Digite um formato válido",
-                errorInvalidText: "Digie uma data entre 2019 e 2025",
-                fieldHintText: "Escreva uma data no formato mm/dd/yyyy",
-                fieldLabelText: "Escreva uma data no formato mm/dd/yyyy",
-                firstDate: DateTime(DateTime.now().year - 1000),
-                lastDate: DateTime(DateTime.now().year + 1000),
-                initialDate: deliveryDateProject,
-                onDateSubmitted: (date) {
-                  deliveryDateProject = date;
-                },
-              ),
-              InputDatePickerFormField(
-                errorFormatText: "Digite um formato válido",
-                errorInvalidText: "Digie uma data entre 2019 e 2025",
-                fieldHintText: "Escreva uma data no formato mm/dd/yyyy",
-                fieldLabelText: "Escreva uma data no formato mm/dd/yyyy",
-                firstDate: DateTime(DateTime.now().year - 1000),
-                lastDate: DateTime(DateTime.now().year + 1000),
-                initialDate: deadlineDateProject,
-                onDateSubmitted: (date) {
-                  deadlineDateProject = date;
                 },
               ),
               Padding(

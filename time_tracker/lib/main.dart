@@ -3,6 +3,7 @@ import 'package:time_tracker/model/project.dart';
 import 'package:time_tracker/model/task.dart';
 import 'package:time_tracker/screens/projects.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() => runApp(const ProviderScope(child: MyApp()));
 
@@ -28,6 +29,12 @@ class MyApp extends ConsumerWidget {
 
     return MaterialApp(
       title: "Time Tracker",
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate
+      ],
+      supportedLocales: const [Locale('pt', 'BR')],
       home: Scaffold(
           appBar: AppBar(
             title: const Text("Meus Projetos"),

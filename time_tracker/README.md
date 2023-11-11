@@ -1,16 +1,14 @@
-# time_tracker
+# Time-Tracker
 
-A new Flutter project.
+## Integrantes
 
-## Getting Started
+- Caio Silva Pontes
+- Diego Carapiá
+- Isaque Copque
+- Matheus Novais
 
-This project is a starting point for a Flutter application.
+## Descrição
 
-A few resources to get you started if this is your first Flutter project:
+Uma aplicação que permite ao usuário registrar e controlar o tempo dedicado a suas atividades e projetos.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## [User stories](https://docs.google.com/document/d/1Cy587DQJvKku02Bx_x0Rm6cHbdWNYQqjWPDAD_g7iOU/edit?usp=sharing)
