@@ -1,8 +1,8 @@
 class Task {
-  String _name;
-  DateTime _initialDate;
-  DateTime _finalDate;
-  double? _hour;
+  final String _name;
+  final DateTime _initialDate;
+  final DateTime _finalDate;
+  final double? _hour;
   bool _isCompleted = false;
 
   Task(this._name, this._initialDate, this._finalDate, this._hour, bool? isCompleted){

@@ -19,9 +19,11 @@ class TaskForm extends ConsumerWidget {
     DateTime timeNow = DateTime.now();
 
     return Scaffold(
-        appBar: AppBar(title: const Text('Cadastrar Tarefa')),
-        body: Form(
-          key: formKey,
+      appBar: AppBar(title: const Text('Cadastrar Tarefa')),
+      body: Form(
+        key: formKey,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -45,7 +47,7 @@ class TaskForm extends ConsumerWidget {
                   labelText: 'Data inicial',
                 ),
                 readOnly: true,
-                validator: (String? value){
+                validator: (String? value) {
                   if (value == null || value.isEmpty) {
                     return 'Informe a data inicial';
                   }
@@ -69,12 +71,12 @@ class TaskForm extends ConsumerWidget {
                   border: OutlineInputBorder(),
                   labelText: 'Data Final',
                 ),
-                validator: (String? value){
+                validator: (String? value) {
                   if (value == null || value.isEmpty) {
                     return 'Informe a data final';
                   }
-                  if(initialDateTask != null && finalDateTask != null){
-                    if(finalDateTask!.compareTo(initialDateTask!) < 0){
+                  if (initialDateTask != null && finalDateTask != null) {
+                    if (finalDateTask!.compareTo(initialDateTask!) < 0) {
                       return 'Data final inválida';
                     }
                   }
@@ -94,29 +96,35 @@ class TaskForm extends ConsumerWidget {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    if (formKey.currentState!.validate()) {
-                      List<Project> projetosDeepCopy =
-                          List.from(ref.read(projectsProvider.notifier).state);
-                      Task newTask = Task(
-                          taskName, initialDateTask!, finalDateTask!, 0, false);
-                      int i = projetosDeepCopy.indexOf(project);
-                      projetosDeepCopy.elementAt(i).addTask(newTask);
-                      ref.read(projectsProvider.notifier).state =
-                          projetosDeepCopy;
-                      Navigator.pop(context);
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text('Tarefa adicionada'),
-                          duration: Duration(milliseconds: 1600)));
-                    }
-                  },
-                  child: const Text('Cadastrar'),
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 40,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      if (formKey.currentState!.validate()) {
+                        List<Project> projetosDeepCopy = List.from(
+                            ref.read(projectsProvider.notifier).state);
+                        Task newTask = Task(taskName, initialDateTask!,
+                            finalDateTask!, 0, false);
+                        int i = projetosDeepCopy.indexOf(project);
+                        projetosDeepCopy.elementAt(i).addTask(newTask);
+                        ref.read(projectsProvider.notifier).state =
+                            projetosDeepCopy;
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text('Tarefa adicionada'),
+                                duration: Duration(milliseconds: 1600)));
+                      }
+                    },
+                    child: const Text('Cadastrar'),
+                  ),
                 ),
               ),
             ],
           ),
         ),
+      ),
     );
   }
 }

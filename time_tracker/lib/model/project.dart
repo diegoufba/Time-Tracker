@@ -1,12 +1,12 @@
 import 'package:time_tracker/model/task.dart';
 
 class Project{
-   String _name;
+   final String _name;
    double _price = 0;
-   DateTime? _deliveryDate;
-   DateTime? _deadlineDate;
+   final DateTime? _deliveryDate;
+   final DateTime? _deadlineDate;
    double? _spentTime;
-   double? _estimatedTime;
+   final double? _estimatedTime;
    bool _finished = false;
    bool _hourlyRate = false;
    List<Task> _tasks = List.empty();
