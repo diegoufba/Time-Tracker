@@ -9,7 +9,7 @@ void main() => runApp(const ProviderScope(child: MyApp()));
 
 final projectsProvider = StateProvider((ref) => [
     Project("Desenvolvimento App mobile", 1300, null, DateTime.parse("2023-11-30"), 30, 72, false, false, 
-      [Task("Definir Telas", DateTime.parse("2023-09-20"), DateTime.parse("2023-09-30"), 12, true),
+      [Task("Definir Telas", DateTime.parse("2023-09-20"), DateTime.parse("2023-09-30"), 12.23, true),
        Task("Desenvolver Telas", DateTime.parse("2023-10-10"), DateTime.parse("2023-11-30"), 48, false)
       ]
     ),

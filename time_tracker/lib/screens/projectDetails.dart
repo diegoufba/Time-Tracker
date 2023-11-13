@@ -86,7 +86,7 @@ class ProjectDetailsScreen extends ConsumerWidget {
                               readOnly: !editProjectDetails,
                               controller: TextEditingController(
                                   text: project.deadlineDate != null
-                                      ? project.deadlineDate.toString()
+                                      ? project.getDeadLineDateAsText()
                                       : "Sem prazo"),
                               decoration: const InputDecoration(
                                 border: OutlineInputBorder(),
@@ -99,7 +99,7 @@ class ProjectDetailsScreen extends ConsumerWidget {
                             child: TextField(
                                 readOnly: !editProjectDetails,
                                 controller: TextEditingController(
-                                    text: project.deliveryDate.toString()),
+                                    text: project.getDeliveryDateAsText()),
                                 decoration: const InputDecoration(
                                   border: OutlineInputBorder(),
                                   labelText: 'Data Entrega',

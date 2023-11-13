@@ -18,8 +18,7 @@ class TaskForm extends ConsumerWidget {
     DateTime? finalDateTask;
     DateTime timeNow = DateTime.now();
 
-    return MaterialApp(
-      home: Scaffold(
+    return Scaffold(
         appBar: AppBar(title: const Text('Cadastrar Tarefa')),
         body: Form(
           key: formKey,
@@ -101,7 +100,7 @@ class TaskForm extends ConsumerWidget {
                       List<Project> projetosDeepCopy =
                           List.from(ref.read(projectsProvider.notifier).state);
                       Task newTask = Task(
-                          taskName, initialDateTask, finalDateTask, 0, false);
+                          taskName, initialDateTask!, finalDateTask!, 0, false);
                       int i = projetosDeepCopy.indexOf(project);
                       projetosDeepCopy.elementAt(i).addTask(newTask);
                       ref.read(projectsProvider.notifier).state =
@@ -118,7 +117,6 @@ class TaskForm extends ConsumerWidget {
             ],
           ),
         ),
-      ),
     );
   }
 }
