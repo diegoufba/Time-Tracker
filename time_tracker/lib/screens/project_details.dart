@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:time_tracker/main.dart';
 import 'package:time_tracker/model/project.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:time_tracker/screens/taskDetails.dart';
-import 'package:time_tracker/screens/taskForm.dart';
+import 'package:time_tracker/screens/task_details.dart';
+import 'package:time_tracker/screens/task_form.dart';
 
 class ProjectDetailsScreen extends ConsumerWidget {
   ProjectDetailsScreen({super.key, required this.project});
@@ -125,33 +125,46 @@ class ProjectDetailsScreen extends ConsumerWidget {
                 //--------------------------
                 // TAB DE TAREFAS DO PROJETO
                 //--------------------------
-                Column(children: [
-                  project.tasks.isNotEmpty
-                      ? ListView.builder(
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          itemCount: project.tasks.length,
-                          itemBuilder: (context, index) {
-                            return ListTile(
-                                title:
-                                    Text(project.tasks.elementAt(index).name),
-                                onTap: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => TaskDetails(
-                                            task: project.tasks
-                                                .elementAt(index)))));
-                          })
-                      : const Text("Nenhuma tarefa no projeto"),
-                  ElevatedButton(
-                      onPressed: () => {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => TaskForm(project: project)))
-                          },
-                      child: const Text("Criar Tarefa"))
-                ]),
+                Container(
+                  margin: const EdgeInsets.only(top: 10),
+                  child: Column(children: [
+                    project.tasks.isNotEmpty
+                        ? ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            itemCount: project.tasks.length,
+                            itemBuilder: (context, index) {
+                              return Card(
+                                  child: ListTile(
+                                      title: Text(
+                                          project.tasks.elementAt(index).name),
+                                      trailing: const Icon(Icons.arrow_forward),
+                                      onTap: () => Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => TaskDetails(
+                                                  task: project.tasks
+                                                      .elementAt(index))))));
+                            })
+                        : const Text("Nenhuma tarefa no projeto"),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: 40,
+                        child: ElevatedButton(
+                            onPressed: () => {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              TaskForm(project: project)))
+                                },
+                            child: const Text("Criar Tarefa")),
+                      ),
+                    )
+                  ]),
+                ),
               ]))
             ]),
           )),

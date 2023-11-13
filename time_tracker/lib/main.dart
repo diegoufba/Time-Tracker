@@ -8,25 +8,35 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 void main() => runApp(const ProviderScope(child: MyApp()));
 
 final projectsProvider = StateProvider((ref) => [
-    Project("Desenvolvimento App mobile", 1300, null, DateTime.parse("2023-11-30"), 30, 72, false, false, 
-      [Task("Definir Telas", DateTime.parse("2023-09-20"), DateTime.parse("2023-09-30"), 12.23, true),
-       Task("Desenvolver Telas", DateTime.parse("2023-10-10"), DateTime.parse("2023-11-30"), 48, false)
-      ]
-    ),
-    Project("Criação Sistema Web", 80, null, DateTime.parse("2023-12-25"), 102, 306, false, true, 
-      [Task("Criação de rotas", DateTime.parse("2023-09-20"), DateTime.parse("2023-09-30"), 15, true),
-      ]
-    ),
-    Project("Mapeamento Relacional de Negócio", 1200, DateTime.parse("2023-11-20"), DateTime.parse("2023-11-21"), 50, 60, true, false, null),
-]);
+      Project("Desenvolvimento App mobile", 1300, null,
+          DateTime.parse("2023-11-30"), 30, 72, false, false, [
+        Task("Definir Telas", DateTime.parse("2023-09-20"),
+            DateTime.parse("2023-09-30"), 12.23, true),
+        Task("Desenvolver Telas", DateTime.parse("2023-10-10"),
+            DateTime.parse("2023-11-30"), 48, false)
+      ]),
+      Project("Criação Sistema Web", 80, null, DateTime.parse("2023-12-25"),
+          102, 306, false, true, [
+        Task("Criação de rotas", DateTime.parse("2023-09-20"),
+            DateTime.parse("2023-09-30"), 15, true),
+      ]),
+      Project(
+          "Mapeamento Relacional de Negócio",
+          1200,
+          DateTime.parse("2023-11-20"),
+          DateTime.parse("2023-11-21"),
+          50,
+          60,
+          true,
+          false,
+          null),
+    ]);
 
 class MyApp extends ConsumerWidget {
-
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     return MaterialApp(
       title: "Time Tracker",
       localizationsDelegates: const [
@@ -36,11 +46,11 @@ class MyApp extends ConsumerWidget {
       ],
       supportedLocales: const [Locale('pt', 'BR')],
       home: Scaffold(
-          appBar: AppBar(
-            title: const Text("Meus Projetos"),
-          ),
-          body: const ProjectsScreen(),
+        appBar: AppBar(
+          title: const Text("Meus Projetos"),
         ),
+        body: const ProjectsScreen(),
+      ),
     );
   }
 }
