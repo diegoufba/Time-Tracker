@@ -22,7 +22,9 @@ class Project{
   }
 
   void addTask(Task task){
-    _tasks.add(task);
+    var tasklistcopy = _tasks.toList();
+    tasklistcopy.add(task);
+    _tasks = tasklistcopy;
   }
 
   void removeTask(Task task){

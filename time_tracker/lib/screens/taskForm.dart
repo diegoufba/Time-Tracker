@@ -12,6 +12,7 @@ class TaskForm extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
     final intitialDateController = TextEditingController();
+    final finalDateController = TextEditingController();
     String taskName = "";
     DateTime? initialDateTask;
     DateTime? finalDateTask;
@@ -45,42 +46,51 @@ class TaskForm extends ConsumerWidget {
                   labelText: 'Data inicial',
                 ),
                 readOnly: true,
-                onTap: () async{
-                  DateTime? finalDateTime = await pickDateTime(context, timeNow);
-                  if(finalDateTime != null){
-                     String formattedDate =
-                        DateFormat('dd/MM/yyyy hh:mm').format(finalDateTime);
-                    initialDateTask = finalDateTime;
+                validator: (String? value){
+                  if (value == null || value.isEmpty) {
+                    return 'Informe a data inicial';
+                  }
+                  return null;
+                },
+                onTap: () async {
+                  DateTime? initialDateTime =
+                      await pickDateTime(context, timeNow);
+                  if (initialDateTime != null) {
+                    String formattedDate =
+                        DateFormat('dd/MM/yyyy hh:mm').format(initialDateTime);
+                    initialDateTask = initialDateTime;
                     intitialDateController.text = formattedDate;
                   }
                 },
               ),
-              InputDatePickerFormField(
-                errorFormatText: "Digite um formato válido",
-                errorInvalidText: "Digite uma data entre 2019 e 2025",
-                fieldHintText:
-                    "Escreva uma data inicial para a tarefa no formato mm/dd/yyyy",
-                fieldLabelText:
-                    "Escreva uma data inicial para a tarefa no formato mm/dd/yyyy",
-                firstDate: DateTime(DateTime.now().year - 1000),
-                lastDate: DateTime(DateTime.now().year + 1000),
-                initialDate: initialDateTask,
-                onDateSubmitted: (date) {
-                  initialDateTask = date;
+              const SizedBox(height: 20),
+              TextFormField(
+                controller: finalDateController,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Data Final',
+                ),
+                validator: (String? value){
+                  if (value == null || value.isEmpty) {
+                    return 'Informe a data final';
+                  }
+                  if(initialDateTask != null && finalDateTask != null){
+                    if(finalDateTask!.compareTo(initialDateTask!) < 0){
+                      return 'Data final inválida';
+                    }
+                  }
+                  return null;
                 },
-              ),
-              InputDatePickerFormField(
-                errorFormatText: "Digite um formato válido",
-                errorInvalidText: "Digie uma data entre 1500 e 3800",
-                fieldHintText:
-                    "Escreva uma data final para a tarefa no formato mm/dd/yyyy",
-                fieldLabelText:
-                    "Escreva uma data final para a tarefa no formato mm/dd/yyyy",
-                firstDate: DateTime(DateTime.now().year - 1000),
-                lastDate: DateTime(DateTime.now().year + 1000),
-                initialDate: finalDateTask,
-                onDateSubmitted: (date) {
-                  finalDateTask = date;
+                readOnly: true,
+                onTap: () async {
+                  DateTime? finalDateTime =
+                      await pickDateTime(context, timeNow);
+                  if (finalDateTime != null) {
+                    String formattedDate =
+                        DateFormat('dd/MM/yyyy hh:mm').format(finalDateTime);
+                    finalDateTask = finalDateTime;
+                    finalDateController.text = formattedDate;
+                  }
                 },
               ),
               Padding(
@@ -88,12 +98,12 @@ class TaskForm extends ConsumerWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
-                      final List<Project> projetosDeepCopy =
+                      List<Project> projetosDeepCopy =
                           List.from(ref.read(projectsProvider.notifier).state);
                       Task newTask = Task(
                           taskName, initialDateTask, finalDateTask, 0, false);
                       int i = projetosDeepCopy.indexOf(project);
-                      projetosDeepCopy.elementAt(i).tasks.add(newTask);
+                      projetosDeepCopy.elementAt(i).addTask(newTask);
                       ref.read(projectsProvider.notifier).state =
                           projetosDeepCopy;
                       Navigator.pop(context);
@@ -113,14 +123,13 @@ class TaskForm extends ConsumerWidget {
   }
 }
 
+Future<DateTime?> pickDateTime(BuildContext context, DateTime timeNow) async {
+  DateTime? newDate = await pickDate(context, timeNow);
+  if (newDate == null) return null;
 
-Future<DateTime?> pickDateTime(BuildContext context,DateTime timeNow) async{
-   DateTime? newDate = await pickDate(context,timeNow);
-   if(newDate == null) return null;
-
-  TimeOfDay? newTime = await pickTime(context,timeNow);
-  if(newTime != null){
-     return DateTime(
+  TimeOfDay? newTime = await pickTime(context, timeNow);
+  if (newTime != null) {
+    return DateTime(
       newDate.year,
       newDate.month,
       newDate.day,
@@ -132,25 +141,26 @@ Future<DateTime?> pickDateTime(BuildContext context,DateTime timeNow) async{
   return null;
 }
 
-Future<DateTime?> pickDate(BuildContext context,DateTime timeNow) => showDatePicker(
-      context: context,
-      initialDate: timeNow,
-      firstDate: timeNow,
-      cancelText: "Cancelar",
-      helpText: "Escolha o prazo",
-      errorFormatText: "Formato inválido",
-      errorInvalidText: "Texto inválido",
-      locale: const Locale('pt', 'BR'),
-      lastDate: DateTime(timeNow.year + 10)
-);
+Future<DateTime?> pickDate(BuildContext context, DateTime timeNow) =>
+    showDatePicker(
+        context: context,
+        initialDate: timeNow,
+        firstDate: timeNow.subtract(const Duration(days: 30)),
+        cancelText: "Cancelar",
+        helpText: "Escolha o prazo",
+        errorFormatText: "Formato inválido",
+        errorInvalidText: "Texto inválido",
+        locale: const Locale('pt', 'BR'),
+        lastDate: DateTime(timeNow.year + 10));
 
-Future<TimeOfDay?> pickTime(BuildContext context,DateTime timeNow) => showTimePicker(
+Future<TimeOfDay?> pickTime(BuildContext context, DateTime timeNow) =>
+    showTimePicker(
       context: context,
       initialTime: TimeOfDay(hour: timeNow.hour, minute: timeNow.minute),
       cancelText: "Cancelar",
       helpText: "Escolha o prazo",
       errorInvalidText: "Texto inválido",
-);
+    );
 
 // Future pickDateTime(BuildContext context, DateTime timeNow) async{
 //   DateTime? newDate = await showDatePicker(
