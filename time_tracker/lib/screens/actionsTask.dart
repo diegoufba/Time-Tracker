@@ -6,59 +6,62 @@ void main() {
       appBar: AppBar(
         title: const Text('TASK NAME'),
       ),
-      body: _taskActions(),
+      body: Center(child: _TaskActions()),
     ),
   ));
 }
 
-class _taskActions extends StatelessWidget {
-  const _taskActions({super.key});
+class _TaskActions extends StatelessWidget {
+  const _TaskActions({Key? key});
 
   @override
   Widget build(BuildContext context) {
-
-    return Column(
-      children: [
-        ElevatedButton.icon(
-            onPressed: (){
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text("Tarefa deletada."),
-                duration: const Duration(milliseconds: 500),
-              ));
-              }, 
-             icon: Icon(Icons.delete_outlined), 
-             label: Text("Deletar tarefa"),  
-        ),
-        ElevatedButton.icon(
-            onPressed: (){
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text("Tarefa registrada como concluída."),
-                duration: const Duration(milliseconds: 500),
-              ));
-              }, 
-             icon: Icon(Icons.check_outlined), 
-             label: Text("Concluir tarefa"),  
-
-         ),        
-        ElevatedButton.icon(
-            onPressed: (){
+    return Container(
+      child: Column(
+        //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          SizedBox(height: 40),
+          ElevatedButton.icon(
+            onPressed: () {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text("Cronometrar da tarefa iniciado."),
                 duration: const Duration(milliseconds: 500),
               ));
-              }, 
-             icon: Icon(Icons.access_alarm), 
-             label: Text("Cronômetro da tarefa"),  
-         ),        
-        ElevatedButton.icon(
-            onPressed: (){
-
-              }, 
-             icon: Icon(Icons.create_outlined), 
-             label: Text("Editar tarefa"),  
-         )        
-           
-      ],
+            },
+            icon: Icon(Icons.access_alarm),
+            label: Text("Cronômetro da tarefa"),
+          ),
+          SizedBox(height: 25),
+          ElevatedButton.icon(
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text("Tarefa registrada como concluída."),
+                duration: const Duration(milliseconds: 500),
+              ));
+            },
+            icon: Icon(Icons.check_outlined),
+            label: Text("Concluir tarefa"),
+          ),
+          SizedBox(height: 25),
+          ElevatedButton.icon(
+            onPressed: () {},
+            icon: Icon(Icons.create_outlined),
+            label: Text("Editar tarefa"),
+          ),
+          SizedBox(height: 25),
+          ElevatedButton.icon(
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text("Tarefa deletada."),
+                duration: const Duration(milliseconds: 500),
+              ));
+            },
+            icon: Icon(Icons.delete_outlined),
+            label: Text("Deletar tarefa"),
+          ),
+        ],
+      ),
     );
   }
 }
