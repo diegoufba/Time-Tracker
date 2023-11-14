@@ -34,4 +34,8 @@ class Task {
 
   double? get hour => _hour;
 
+  set isCompleted(bool isCompleted){
+    _isCompleted = isCompleted;
+  }
+
 }

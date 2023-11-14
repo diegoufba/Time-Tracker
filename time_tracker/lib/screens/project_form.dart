@@ -9,11 +9,11 @@ class ProjectForm extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final intitialDateController = TextEditingController();
+    final deadlineDateController = TextEditingController();
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
     String projectName = "";
     double priceProject = 0;
-    DateTime deliveryDateProject = DateTime.now();
+    DateTime? deliveryDateProject ;
     DateTime deadlineDateProject = DateTime.now();
     double estimatedTimeProject = 0;
     bool projectHourlyRated = false;
@@ -91,11 +91,17 @@ class ProjectForm extends ConsumerWidget {
                     }).toList()),
                 const SizedBox(height: 20),
                 TextFormField(
-                  controller: intitialDateController,
+                  controller: deadlineDateController,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Prazo',
                   ),
+                  validator: (String? value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Informe o prazo';
+                    }
+                    return null;
+                  },
                   readOnly: true,
                   onTap: () async {
                     DateTime? newDate = await showDatePicker(
@@ -111,8 +117,8 @@ class ProjectForm extends ConsumerWidget {
                     if (newDate != null) {
                       String formattedDate =
                           DateFormat('dd/MM/yyyy').format(newDate);
-                      deliveryDateProject = newDate;
-                      intitialDateController.text = formattedDate;
+                      deadlineDateProject = newDate;
+                      deadlineDateController.text = formattedDate;
                     }
                   },
                 ),

@@ -153,7 +153,6 @@ Future<DateTime?> pickDate(BuildContext context, DateTime timeNow) =>
         initialDate: timeNow,
         firstDate: timeNow.subtract(const Duration(days: 30)),
         cancelText: "Cancelar",
-        helpText: "Escolha o prazo",
         errorFormatText: "Formato inválido",
         errorInvalidText: "Texto inválido",
         locale: const Locale('pt', 'BR'),
@@ -164,50 +163,5 @@ Future<TimeOfDay?> pickTime(BuildContext context, DateTime timeNow) =>
       context: context,
       initialTime: TimeOfDay(hour: timeNow.hour, minute: timeNow.minute),
       cancelText: "Cancelar",
-      helpText: "Escolha o prazo",
       errorInvalidText: "Texto inválido",
     );
-
-// Future pickDateTime(BuildContext context, DateTime timeNow) async{
-//   DateTime? newDate = await showDatePicker(
-//       context: context,
-//       initialDate: timeNow,
-//       firstDate: timeNow,
-//       cancelText: "Cancelar",
-//       helpText: "Escolha o prazo",
-//       errorFormatText: "Formato inválido",
-//       errorInvalidText: "Texto inválido",
-//       locale: const Locale('pt', 'BR'),
-//       lastDate: DateTime(timeNow.year + 10));
-//   if(newDate != null){
-//     String formattedDate =
-//                         DateFormat('dd/MM/yyyy').format(newDate);
-//                     initialDateTask = newDate;
-//                     intitialDateController.text = formattedDate;
-//   }
-//   else return;
-//   TimeOfDay? newTime = await showDatePicker(
-//       context: context,
-//       initialDate: timeNow,
-//       firstDate: timeNow,
-//       cancelText: "Cancelar",
-//       helpText: "Escolha o prazo",
-//       errorFormatText: "Formato inválido",
-//       errorInvalidText: "Texto inválido",
-//       locale: const Locale('pt', 'BR'),
-//       lastDate: DateTime(timeNow.year + 10));
-//    if(newTime != null){
-//     final finalDateTime  = DateTime(
-//       newDate.year,
-//       newDate.month,
-//       newDate.day,
-//       newDate.hour,
-//       newDate.minute,
-//     );
-
-//     String formattedDate =
-//                         DateFormat('dd/MM/yyyy hh:mm').format(finalDateTime);
-//                     initialDateTask = finalDateTime;
-//                     intitialDateController.text = formattedDate;
-//   }
-// }

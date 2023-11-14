@@ -37,14 +37,16 @@ class Project{
 
   String getDeadLineDateAsText(){
     if(_deadlineDate != null){
-      return "${_deadlineDate!.day}/${_deadlineDate!.month > 9? _deadlineDate!.month : "0${_deadlineDate!.month.toString()}"}/${_deadlineDate!.year} ${_deadlineDate!.hour > 9 ? _deadlineDate!.hour : "0${_deadlineDate!.hour.toString()}"}:${_deadlineDate!.minute > 9 ? _deadlineDate!.minute : "0${_deadlineDate!.minute}"}";
+      // return "${_deadlineDate!.day}/${_deadlineDate!.month > 9? _deadlineDate!.month : "0${_deadlineDate!.month.toString()}"}/${_deadlineDate!.year} ${_deadlineDate!.hour > 9 ? _deadlineDate!.hour : "0${_deadlineDate!.hour.toString()}"}:${_deadlineDate!.minute > 9 ? _deadlineDate!.minute : "0${_deadlineDate!.minute}"}";
+      return "${_deadlineDate!.day}/${_deadlineDate!.month > 9? _deadlineDate!.month : "0${_deadlineDate!.month.toString()}"}/${_deadlineDate!.year}";
     }
     return "";
   }
 
   String getDeliveryDateAsText(){
     if(_deliveryDate != null){
-      return "${_deliveryDate!.day}/${_deliveryDate!.month > 9? _deliveryDate!.month : "0${_deliveryDate!.month.toString()}"}/${_deliveryDate!.year} ${_deliveryDate!.hour > 9 ? _deliveryDate!.hour : "0${_deliveryDate!.hour.toString()}"}:${_deliveryDate!.minute > 9 ? _deliveryDate!.minute : "0${_deliveryDate!.minute}"}";
+      // return "${_deliveryDate!.day}/${_deliveryDate!.month > 9? _deliveryDate!.month : "0${_deliveryDate!.month.toString()}"}/${_deliveryDate!.year} ${_deliveryDate!.hour > 9 ? _deliveryDate!.hour : "0${_deliveryDate!.hour.toString()}"}:${_deliveryDate!.minute > 9 ? _deliveryDate!.minute : "0${_deliveryDate!.minute}"}";
+      return "${_deliveryDate!.day}/${_deliveryDate!.month > 9? _deliveryDate!.month : "0${_deliveryDate!.month.toString()}"}/${_deliveryDate!.year}";
     }
     return "";
   }
