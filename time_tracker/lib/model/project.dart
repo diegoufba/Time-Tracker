@@ -51,6 +51,10 @@ class Project{
     return "";
   }
 
+  static Project fromObj(Project obj){
+    return Project(obj.name, obj.price, obj.deliveryDate, obj.deadlineDate, obj.spentTime, obj.estimatedTime, obj.finished, obj.hourlyRate, obj.tasks);
+  }
+
   set name(String name) => _name = name;
 
   set price(double price) => _price = price;
@@ -64,6 +68,8 @@ class Project{
   set finished(bool finished) => _finished = finished;
 
   set spentTime(double? time) => _spentTime = time;
+
+  set tasks(List<Task> tasks) => _tasks = tasks;
 
   String get name => _name;
 

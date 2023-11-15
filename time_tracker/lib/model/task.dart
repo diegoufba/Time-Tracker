@@ -1,8 +1,8 @@
 class Task {
-  final String _name;
-  final DateTime _initialDate;
-  final DateTime _finalDate;
-  final double? _hour;
+  String _name;
+  DateTime _initialDate;
+  DateTime? _finalDate;
+  double? _hour;
   bool _isCompleted = false;
 
   Task(this._name, this._initialDate, this._finalDate, this._hour, bool? isCompleted){
@@ -20,7 +20,8 @@ class Task {
   }
 
   String getFinalDateAsText(){
-    return "${_finalDate.day}/${_finalDate.month > 9? _finalDate.month : "0${_finalDate.month.toString()}"}/${_finalDate.year} ${_finalDate.hour > 9 ? _finalDate.hour : "0${_finalDate.hour.toString()}"}:${_finalDate.minute > 9 ? _finalDate.minute : "0${_finalDate.minute}"}";
+    if(_finalDate == null) return "";
+    return "${_finalDate!.day}/${_finalDate!.month > 9? _finalDate!.month : "0${_finalDate!.month.toString()}"}/${_finalDate!.year} ${_finalDate!.hour > 9 ? _finalDate!.hour : "0${_finalDate!.hour.toString()}"}:${_finalDate!.minute > 9 ? _finalDate!.minute : "0${_finalDate!.minute}"}";
   }
 
   String getHourAsText(){
@@ -30,6 +31,10 @@ class Task {
     return "${tempos.elementAt(0)}H ${minutos}M";
   }
 
+  DateTime get initialDate => _initialDate;
+
+  DateTime? get finalDate => _finalDate;
+
   bool get isCompleted => _isCompleted;
 
   double? get hour => _hour;
@@ -38,4 +43,9 @@ class Task {
     _isCompleted = isCompleted;
   }
 
+  set name(String name) => _name = name;
+
+  set initialDate(DateTime initialDate) => _initialDate = initialDate;
+
+  set finalDate(DateTime? finalDate) => _finalDate = finalDate;
 }

@@ -21,7 +21,8 @@ class ProjectDetailsScreen extends ConsumerWidget {
     bool editProjectDetails =
         ref.read(editProjectDetailsProvider.notifier).state;
     List<String> chargeOptions = ["Valor fixo", "Por hora"];
-    final deadlineDateController = TextEditingController( text: project.deadlineDate != null
+    final deadlineDateController = TextEditingController(
+        text: project.deadlineDate != null
             ? DateFormat('dd/MM/yyyy').format(project.deadlineDate!).toString()
             : "");
     final deliveryDateController = TextEditingController(
@@ -95,7 +96,9 @@ class ProjectDetailsScreen extends ConsumerWidget {
                                     keyboardType: TextInputType.number,
                                     controller: TextEditingController(
                                         text: project.price != 0
-                                            ? (editProjectDetails? project.price.toString() : "R\$ ${project.price.toString()}")
+                                            ? (editProjectDetails
+                                                ? project.price.toString()
+                                                : "R\$ ${project.price.toString()}")
                                             : "Nenhum"),
                                     decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
@@ -105,7 +108,9 @@ class ProjectDetailsScreen extends ConsumerWidget {
                             DropdownMenu(
                                 enabled: editProjectDetails,
                                 width: 120,
-                                initialSelection: project.hourlyRate? chargeOptions.last : chargeOptions.first,
+                                initialSelection: project.hourlyRate
+                                    ? chargeOptions.last
+                                    : chargeOptions.first,
                                 label: const Text("Tipo de cobrança"),
                                 onSelected: (value) => {
                                       value == "Por hora"
@@ -141,8 +146,9 @@ class ProjectDetailsScreen extends ConsumerWidget {
                                 DateTime? initialDateTime =
                                     await pickOnlyDate(context);
                                 if (initialDateTime != null) {
-                                  String formattedDate = DateFormat('dd/MM/yyyy')
-                                      .format(initialDateTime);
+                                  String formattedDate =
+                                      DateFormat('dd/MM/yyyy')
+                                          .format(initialDateTime);
                                   project.deadlineDate = initialDateTime;
                                   deadlineDateController.text = formattedDate;
                                 }
@@ -153,52 +159,57 @@ class ProjectDetailsScreen extends ConsumerWidget {
                           SizedBox(
                               width: 250,
                               child: TextFormField(
-                              enabled: editProjectDetails,
-                              controller: deliveryDateController,
-                              decoration: const InputDecoration(
-                                border: OutlineInputBorder(),
-                                labelText: 'Data de entrega',
-                              ),
-                              readOnly: !editProjectDetails,
-                              onTap: () async {
-                                DateTime? initialDateTime =
-                                    await pickOnlyDate(context);
-                                if (initialDateTime != null) {
-                                  String formattedDate = DateFormat('dd/MM/yyyy')
-                                      .format(initialDateTime);
-                                  project.deliveryDate = initialDateTime;
-                                  project.finished = true;
-                                  deliveryDateController.text = formattedDate;
-                                }else{
-                                  project.finished = false;
-                                  project.deliveryDate = null;
-                                }
-                              },
-                            )),
+                                enabled: editProjectDetails,
+                                controller: deliveryDateController,
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: 'Data de entrega',
+                                ),
+                                readOnly: !editProjectDetails,
+                                onTap: () async {
+                                  DateTime? initialDateTime =
+                                      await pickOnlyDate(context);
+                                  if (initialDateTime != null) {
+                                    String formattedDate =
+                                        DateFormat('dd/MM/yyyy')
+                                            .format(initialDateTime);
+                                    project.deliveryDate = initialDateTime;
+                                    project.finished = true;
+                                    deliveryDateController.text = formattedDate;
+                                  } else {
+                                    project.finished = false;
+                                    project.deliveryDate = null;
+                                  }
+                                },
+                              )),
                           const SizedBox(height: 30),
                           SizedBox(
                               width: 250,
-                              child:TextFormField(
+                              child: TextFormField(
                                   readOnly: !editProjectDetails,
                                   keyboardType: TextInputType.number,
-                                   validator: (value) {
-                                      if (value != null && value.isNotEmpty) {
-                                        double? aux = double.tryParse(value);
-                                        if (aux != null && aux < 0) {
-                                          return 'Horas inválidas';
-                                        }
-                                        project.spentTime = aux??0;
+                                  validator: (value) {
+                                    if (value != null && value.isNotEmpty) {
+                                      double? aux = double.tryParse(value);
+                                      if (aux != null && aux < 0) {
+                                        return 'Horas inválidas';
                                       }
-                                      project.spentTime = 0;
-                                      return null;
+                                      project.spentTime = aux ?? 0;
+                                    }
+                                    project.spentTime = 0;
+                                    return null;
                                   },
                                   controller: TextEditingController(
                                       text: project.spentTime != null
-                                          ? (editProjectDetails? project.spentTime.toString() : project.spentTimeAsText())
+                                          ? (editProjectDetails
+                                              ? project.spentTime.toString()
+                                              : project.spentTimeAsText())
                                           : "Nenhum"),
                                   decoration: InputDecoration(
                                     border: const OutlineInputBorder(),
-                                    labelText: editProjectDetails? "Tempo gasto (em horas)" : 'Tempo gasto',
+                                    labelText: editProjectDetails
+                                        ? "Tempo gasto (em horas)"
+                                        : 'Tempo gasto',
                                   ))),
                         ],
                         const SizedBox(height: 20),
@@ -217,14 +228,14 @@ class ProjectDetailsScreen extends ConsumerWidget {
                               ),
                               const SizedBox(width: 20),
                               ElevatedButton.icon(
-                              onPressed: () {
-                                showAlertDialog(context,ref,project);
-                              },
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.red[400]),
-                              icon: const Icon(Icons.delete_outlined),
-                              label: const Text("Deletar"),
-                                                ),
+                                onPressed: () {
+                                  showAlertDialog(context, ref, project);
+                                },
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.red[400]),
+                                icon: const Icon(Icons.delete_outlined),
+                                label: const Text("Deletar"),
+                              ),
                             ],
                           ),
                         ],
@@ -232,15 +243,20 @@ class ProjectDetailsScreen extends ConsumerWidget {
                           ElevatedButton.icon(
                             onPressed: () {
                               if (formKey.currentState!.validate()) {
-                                int i = ref.read(projectsProvider.notifier).state.indexOf(project);
-                                ref.read(projectsProvider.notifier).state[i] = project;
+                                int i = ref
+                                    .read(projectsProvider.notifier)
+                                    .state
+                                    .indexOf(project);
+                                ref.read(projectsProvider.notifier).state[i] =
+                                    project;
                                 ref
                                     .read(editProjectDetailsProvider.notifier)
                                     .state = !editProjectDetails;
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Projeto editado'),
-                                duration: Duration(milliseconds: 1600)));
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text('Projeto editado'),
+                                        duration:
+                                            Duration(milliseconds: 1600)));
                               }
                             },
                             icon: const Icon(Icons.create_outlined),
@@ -268,16 +284,22 @@ class ProjectDetailsScreen extends ConsumerWidget {
                                         title: Text(project.tasks
                                             .elementAt(index)
                                             .name),
+                                        subtitle: Text(project.tasks.elementAt(index).isCompleted ? "Completo" : "Incompleto",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                backgroundColor: project.tasks
+                                                        .elementAt(index)
+                                                        .isCompleted
+                                                    ? Colors.greenAccent[400]
+                                                    : Colors.amber.shade700)),
                                         trailing:
                                             const Icon(Icons.arrow_forward),
                                         onTap: () => Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                                builder: (context) =>
-                                                    TaskDetails(
-                                                        task: project.tasks
-                                                            .elementAt(
-                                                                index))))));
+                                                builder: (context) => TaskDetails(
+                                                    project: project,
+                                                    task: project.tasks.elementAt(index))))));
                               })
                           : const Text("Nenhuma tarefa no projeto"),
                       Padding(
@@ -305,21 +327,21 @@ class ProjectDetailsScreen extends ConsumerWidget {
     );
   }
 
-  showAlertDialog(BuildContext context, WidgetRef ref, Project project){
+  showAlertDialog(BuildContext context, WidgetRef ref, Project project) {
     // set up the buttons
     Widget cancelButton = IconButton(
       icon: const Icon(Icons.cancel),
-      onPressed:  () {
+      onPressed: () {
         Navigator.pop(context);
       },
     );
     Widget continueButton = IconButton(
-      icon: Icon(Icons.delete_forever,color: Colors.red[400] ),
-      onPressed:  () {
+      icon: Icon(Icons.delete_forever, color: Colors.red[400]),
+      onPressed: () {
         int i = ref.read(projectsProvider.notifier).state.indexOf(project);
-                                ref.read(projectsProvider.notifier).state[i] = project;
-        final List<Project> projetosDeepCopy = List.from(
-                              ref.read(projectsProvider.notifier).state);
+        ref.read(projectsProvider.notifier).state[i] = project;
+        final List<Project> projetosDeepCopy =
+            List.from(ref.read(projectsProvider.notifier).state);
         projetosDeepCopy.removeAt(i);
         ref.read(projectsProvider.notifier).state = projetosDeepCopy;
         Navigator.pop(context);
