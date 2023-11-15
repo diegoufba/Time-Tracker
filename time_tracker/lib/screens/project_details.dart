@@ -203,14 +203,29 @@ class ProjectDetailsScreen extends ConsumerWidget {
                         ],
                         const SizedBox(height: 20),
                         if (!editProjectDetails) ...[
-                          ElevatedButton.icon(
-                            onPressed: () {
-                              ref
-                                  .read(editProjectDetailsProvider.notifier)
-                                  .state = !editProjectDetails;
-                            },
-                            icon: const Icon(Icons.create_outlined),
-                            label: const Text("Editar"),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              ElevatedButton.icon(
+                                onPressed: () {
+                                  ref
+                                      .read(editProjectDetailsProvider.notifier)
+                                      .state = !editProjectDetails;
+                                },
+                                icon: const Icon(Icons.create_outlined),
+                                label: const Text("Editar"),
+                              ),
+                              const SizedBox(width: 20),
+                              ElevatedButton.icon(
+                              onPressed: () {
+                                showAlertDialog(context,ref,project);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.red[400]),
+                              icon: const Icon(Icons.delete_outlined),
+                              label: const Text("Deletar"),
+                                                ),
+                            ],
                           ),
                         ],
                         if (editProjectDetails) ...[
@@ -287,6 +302,48 @@ class ProjectDetailsScreen extends ConsumerWidget {
               ))
             ]),
           )),
+    );
+  }
+
+  showAlertDialog(BuildContext context, WidgetRef ref, Project project){
+    // set up the buttons
+    Widget cancelButton = IconButton(
+      icon: const Icon(Icons.cancel),
+      onPressed:  () {
+        Navigator.pop(context);
+      },
+    );
+    Widget continueButton = IconButton(
+      icon: Icon(Icons.delete_forever,color: Colors.red[400] ),
+      onPressed:  () {
+        int i = ref.read(projectsProvider.notifier).state.indexOf(project);
+                                ref.read(projectsProvider.notifier).state[i] = project;
+        final List<Project> projetosDeepCopy = List.from(
+                              ref.read(projectsProvider.notifier).state);
+        projetosDeepCopy.removeAt(i);
+        ref.read(projectsProvider.notifier).state = projetosDeepCopy;
+        Navigator.pop(context);
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Projeto deletado."),
+          duration: Duration(milliseconds: 1000),
+        ));
+      },
+    );
+    AlertDialog alert = AlertDialog(
+      title: const Text("Confirmação"),
+      content: const Text("Deletar projeto?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 }
