@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:time_tracker/main.dart';
 import 'package:time_tracker/model/project.dart';
 import 'package:time_tracker/model/task.dart';
+import 'package:time_tracker/utils.dart';
 
 class TaskForm extends ConsumerWidget {
   const TaskForm({super.key, required this.project});
@@ -16,7 +17,6 @@ class TaskForm extends ConsumerWidget {
     String taskName = "";
     DateTime? initialDateTask;
     DateTime? finalDateTask;
-    DateTime timeNow = DateTime.now();
 
     return Scaffold(
       appBar: AppBar(title: const Text('Cadastrar Tarefa')),
@@ -55,7 +55,7 @@ class TaskForm extends ConsumerWidget {
                 },
                 onTap: () async {
                   DateTime? initialDateTime =
-                      await pickDateTime(context, timeNow);
+                      await pickDateTime(context);
                   if (initialDateTime != null) {
                     String formattedDate =
                         DateFormat('dd/MM/yyyy hh:mm').format(initialDateTime);
@@ -85,7 +85,7 @@ class TaskForm extends ConsumerWidget {
                 readOnly: true,
                 onTap: () async {
                   DateTime? finalDateTime =
-                      await pickDateTime(context, timeNow);
+                      await pickDateTime(context);
                   if (finalDateTime != null) {
                     String formattedDate =
                         DateFormat('dd/MM/yyyy hh:mm').format(finalDateTime);
@@ -128,40 +128,3 @@ class TaskForm extends ConsumerWidget {
     );
   }
 }
-
-Future<DateTime?> pickDateTime(BuildContext context, DateTime timeNow) async {
-  DateTime? newDate = await pickDate(context, timeNow);
-  if (newDate == null) return null;
-
-  TimeOfDay? newTime = await pickTime(context, timeNow);
-  if (newTime != null) {
-    return DateTime(
-      newDate.year,
-      newDate.month,
-      newDate.day,
-      newTime.hour,
-      newTime.minute,
-    );
-  }
-
-  return null;
-}
-
-Future<DateTime?> pickDate(BuildContext context, DateTime timeNow) =>
-    showDatePicker(
-        context: context,
-        initialDate: timeNow,
-        firstDate: timeNow.subtract(const Duration(days: 30)),
-        cancelText: "Cancelar",
-        errorFormatText: "Formato inválido",
-        errorInvalidText: "Texto inválido",
-        locale: const Locale('pt', 'BR'),
-        lastDate: DateTime(timeNow.year + 10));
-
-Future<TimeOfDay?> pickTime(BuildContext context, DateTime timeNow) =>
-    showTimePicker(
-      context: context,
-      initialTime: TimeOfDay(hour: timeNow.hour, minute: timeNow.minute),
-      cancelText: "Cancelar",
-      errorInvalidText: "Texto inválido",
-    );

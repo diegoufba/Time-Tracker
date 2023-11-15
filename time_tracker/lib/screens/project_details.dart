@@ -1,19 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:time_tracker/main.dart';
 import 'package:time_tracker/model/project.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:time_tracker/screens/task_details.dart';
 import 'package:time_tracker/screens/task_form.dart';
+import 'package:time_tracker/utils.dart';
+
+// final projectChangeProvider = StateProvider((ref) => false);
+final editProjectDetailsProvider = StateProvider((ref) => false);
 
 class ProjectDetailsScreen extends ConsumerWidget {
-  ProjectDetailsScreen({super.key, required this.project});
+  const ProjectDetailsScreen({super.key, required this.project});
   final Project project;
-
-  bool editProjectDetails = false;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.watch(projectsProvider);
+    ref.watch(editProjectDetailsProvider);
+    bool editProjectDetails =
+        ref.read(editProjectDetailsProvider.notifier).state;
+    List<String> chargeOptions = ["Valor fixo", "Por hora"];
+    final deadlineDateController = TextEditingController( text: project.deadlineDate != null
+            ? DateFormat('dd/MM/yyyy').format(project.deadlineDate!).toString()
+            : "");
+    final deliveryDateController = TextEditingController(
+        text: project.deliveryDate != null
+            ? DateFormat('dd/MM/yyyy').format(project.deliveryDate!).toString()
+            : "");
+    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -30,142 +46,245 @@ class ProjectDetailsScreen extends ConsumerWidget {
             height: MediaQuery.of(context).size.height,
             child: Column(children: [
               Expanded(
-                  child: TabBarView(children: [
-                //--------------------------
-                // TAB DE DETALHES DO PROJETO
-                //--------------------------
-                Center(
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 30),
-                      SizedBox(
-                          width: 250,
-                          child: TextField(
-                              readOnly: !editProjectDetails,
-                              controller:
-                                  TextEditingController(text: project.name),
+                  child: TabBarView(
+                children: [
+                  //--------------------------
+                  // TAB DE DETALHES DO PROJETO
+                  //--------------------------
+                  Center(
+                    child: Form(
+                      key: formKey,
+                      child: Column(children: [
+                        const SizedBox(height: 30),
+                        SizedBox(
+                            width: 250,
+                            child: TextFormField(
+                                readOnly: !editProjectDetails,
+                                controller:
+                                    TextEditingController(text: project.name),
+                                validator: (String? value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Informe o título';
+                                  }
+                                  project.name = value;
+                                  return null;
+                                },
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: 'Título',
+                                ))),
+                        const SizedBox(height: 30),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                                width: 115,
+                                child: TextFormField(
+                                    readOnly: !editProjectDetails,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'Por favor, digite um preço';
+                                      }
+                                      double? aux = double.tryParse(value);
+                                      if (aux == null || aux < 0) {
+                                        return 'Por favor, digite um preço válido';
+                                      }
+                                      project.price = aux;
+                                      return null;
+                                    },
+                                    keyboardType: TextInputType.number,
+                                    controller: TextEditingController(
+                                        text: project.price != 0
+                                            ? (editProjectDetails? project.price.toString() : "R\$ ${project.price.toString()}")
+                                            : "Nenhum"),
+                                    decoration: const InputDecoration(
+                                      border: OutlineInputBorder(),
+                                      labelText: 'Preço',
+                                    ))),
+                            const SizedBox(width: 20),
+                            DropdownMenu(
+                                enabled: editProjectDetails,
+                                width: 120,
+                                initialSelection: project.hourlyRate? chargeOptions.last : chargeOptions.first,
+                                label: const Text("Tipo de cobrança"),
+                                onSelected: (value) => {
+                                      value == "Por hora"
+                                          ? project.hourlyRate = true
+                                          : project.hourlyRate = false
+                                    },
+                                dropdownMenuEntries: chargeOptions
+                                    .map<DropdownMenuEntry<String>>(
+                                        (String value) {
+                                  return DropdownMenuEntry<String>(
+                                      value: value, label: value);
+                                }).toList()),
+                          ],
+                        ),
+                        const SizedBox(height: 30),
+                        SizedBox(
+                            width: 250,
+                            child: TextFormField(
+                              enabled: editProjectDetails,
+                              controller: deadlineDateController,
                               decoration: const InputDecoration(
                                 border: OutlineInputBorder(),
-                                labelText: 'Título',
-                              ))),
-                      const SizedBox(height: 30),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
+                                labelText: 'Prazo',
+                              ),
+                              readOnly: !editProjectDetails,
+                              validator: (String? value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Informe o prazo';
+                                }
+                                return null;
+                              },
+                              onTap: () async {
+                                DateTime? initialDateTime =
+                                    await pickOnlyDate(context);
+                                if (initialDateTime != null) {
+                                  String formattedDate = DateFormat('dd/MM/yyyy')
+                                      .format(initialDateTime);
+                                  project.deadlineDate = initialDateTime;
+                                  deadlineDateController.text = formattedDate;
+                                }
+                              },
+                            )),
+                        if (project.finished || editProjectDetails) ...[
+                          const SizedBox(height: 30),
                           SizedBox(
-                              width: 115,
-                              child: TextField(
+                              width: 250,
+                              child: TextFormField(
+                              enabled: editProjectDetails,
+                              controller: deliveryDateController,
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: 'Data de entrega',
+                              ),
+                              readOnly: !editProjectDetails,
+                              onTap: () async {
+                                DateTime? initialDateTime =
+                                    await pickOnlyDate(context);
+                                if (initialDateTime != null) {
+                                  String formattedDate = DateFormat('dd/MM/yyyy')
+                                      .format(initialDateTime);
+                                  project.deliveryDate = initialDateTime;
+                                  project.finished = true;
+                                  deliveryDateController.text = formattedDate;
+                                }else{
+                                  project.finished = false;
+                                  project.deliveryDate = null;
+                                }
+                              },
+                            )),
+                          const SizedBox(height: 30),
+                          SizedBox(
+                              width: 250,
+                              child:TextFormField(
                                   readOnly: !editProjectDetails,
+                                  keyboardType: TextInputType.number,
+                                   validator: (value) {
+                                      if (value != null && value.isNotEmpty) {
+                                        double? aux = double.tryParse(value);
+                                        if (aux != null && aux < 0) {
+                                          return 'Horas inválidas';
+                                        }
+                                        project.spentTime = aux??0;
+                                      }
+                                      project.spentTime = 0;
+                                      return null;
+                                  },
                                   controller: TextEditingController(
-                                      text: project.price != 0
-                                          ? "R\$ ${project.price.toString()}"
+                                      text: project.spentTime != null
+                                          ? (editProjectDetails? project.spentTime.toString() : project.spentTimeAsText())
                                           : "Nenhum"),
-                                  decoration: const InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    labelText: 'Preço',
-                                  ))),
-                          const SizedBox(width: 20),
-                          SizedBox(
-                              width: 115,
-                              child: TextField(
-                                  readOnly: !editProjectDetails,
-                                  controller: TextEditingController(
-                                      text: project.hourlyRate
-                                          ? "Por horas"
-                                          : "Valor fixo"),
-                                  decoration: const InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    labelText: 'Tipo de cobrança',
+                                  decoration: InputDecoration(
+                                    border: const OutlineInputBorder(),
+                                    labelText: editProjectDetails? "Tempo gasto (em horas)" : 'Tempo gasto',
                                   ))),
                         ],
-                      ),
-                      const SizedBox(height: 30),
-                      SizedBox(
-                          width: 250,
-                          child: TextField(
-                              readOnly: !editProjectDetails,
-                              controller: TextEditingController(
-                                  text: project.deadlineDate != null
-                                      ? project.getDeadLineDateAsText()
-                                      : "Sem prazo"),
-                              decoration: const InputDecoration(
-                                border: OutlineInputBorder(),
-                                labelText: 'Data Limite',
-                              ))),
-                      if (project.finished) ...[
-                        const SizedBox(height: 30),
-                        SizedBox(
-                            width: 250,
-                            child: TextField(
-                                readOnly: !editProjectDetails,
-                                controller: TextEditingController(
-                                    text: project.getDeliveryDateAsText()),
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  labelText: 'Data Entrega',
-                                ))),
-                        const SizedBox(height: 30),
-                        SizedBox(
-                            width: 250,
-                            child: TextField(
-                                readOnly: !editProjectDetails,
-                                controller: TextEditingController(
-                                    text: project.spentTime != null
-                                        ? "${project.spentTime.toString()} horas"
-                                        : "Nenhum"),
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  labelText: 'Tempo gasto',
-                                ))),
-                      ]
-                    ],
+                        const SizedBox(height: 20),
+                        if (!editProjectDetails) ...[
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              ref
+                                  .read(editProjectDetailsProvider.notifier)
+                                  .state = !editProjectDetails;
+                            },
+                            icon: const Icon(Icons.create_outlined),
+                            label: const Text("Editar"),
+                          ),
+                        ],
+                        if (editProjectDetails) ...[
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              if (formKey.currentState!.validate()) {
+                                int i = ref.read(projectsProvider.notifier).state.indexOf(project);
+                                ref.read(projectsProvider.notifier).state[i] = project;
+                                ref
+                                    .read(editProjectDetailsProvider.notifier)
+                                    .state = !editProjectDetails;
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Projeto editado'),
+                                duration: Duration(milliseconds: 1600)));
+                              }
+                            },
+                            icon: const Icon(Icons.create_outlined),
+                            label: const Text("Concluir edição"),
+                          ),
+                        ]
+                      ]),
+                    ),
                   ),
-                ),
 
-                //--------------------------
-                // TAB DE TAREFAS DO PROJETO
-                //--------------------------
-                Container(
-                  margin: const EdgeInsets.only(top: 10),
-                  child: Column(children: [
-                    project.tasks.isNotEmpty
-                        ? ListView.builder(
-                            scrollDirection: Axis.vertical,
-                            shrinkWrap: true,
-                            itemCount: project.tasks.length,
-                            itemBuilder: (context, index) {
-                              return Card(
-                                  child: ListTile(
-                                      title: Text(
-                                          project.tasks.elementAt(index).name),
-                                      trailing: const Icon(Icons.arrow_forward),
-                                      onTap: () => Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => TaskDetails(
-                                                  task: project.tasks
-                                                      .elementAt(index))))));
-                            })
-                        : const Text("Nenhuma tarefa no projeto"),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: 40,
-                        child: ElevatedButton(
-                            onPressed: () => {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              TaskForm(project: project)))
-                                },
-                            child: const Text("Criar Tarefa")),
-                      ),
-                    )
-                  ]),
-                ),
-              ]))
+                  //--------------------------
+                  // TAB DE TAREFAS DO PROJETO
+                  //--------------------------
+                  Container(
+                    margin: const EdgeInsets.only(top: 10),
+                    child: Column(children: [
+                      project.tasks.isNotEmpty
+                          ? ListView.builder(
+                              scrollDirection: Axis.vertical,
+                              shrinkWrap: true,
+                              itemCount: project.tasks.length,
+                              itemBuilder: (context, index) {
+                                return Card(
+                                    child: ListTile(
+                                        title: Text(project.tasks
+                                            .elementAt(index)
+                                            .name),
+                                        trailing:
+                                            const Icon(Icons.arrow_forward),
+                                        onTap: () => Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    TaskDetails(
+                                                        task: project.tasks
+                                                            .elementAt(
+                                                                index))))));
+                              })
+                          : const Text("Nenhuma tarefa no projeto"),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SizedBox(
+                          width: double.infinity,
+                          height: 40,
+                          child: ElevatedButton(
+                              onPressed: () => {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                TaskForm(project: project)))
+                                  },
+                              child: const Text("Criar Tarefa")),
+                        ),
+                      )
+                    ]),
+                  ),
+                ],
+              ))
             ]),
           )),
     );

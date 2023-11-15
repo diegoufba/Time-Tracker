@@ -1,12 +1,12 @@
 import 'package:time_tracker/model/task.dart';
 
 class Project{
-   final String _name;
+   String _name;
    double _price = 0;
-   final DateTime? _deliveryDate;
-   final DateTime? _deadlineDate;
+   DateTime? _deliveryDate;
+   DateTime? _deadlineDate;
    double? _spentTime;
-   final double? _estimatedTime;
+   double? _estimatedTime;
    bool _finished = false;
    bool _hourlyRate = false;
    List<Task> _tasks = List.empty();
@@ -51,11 +51,25 @@ class Project{
     return "";
   }
 
+  set name(String name) => _name = name;
+
+  set price(double price) => _price = price;
+
+  set hourlyRate(bool hourlyRate) => _hourlyRate = hourlyRate;
+
+  set deadlineDate(DateTime? deadlineDate) => _deadlineDate = deadlineDate;
+
+  set deliveryDate(DateTime? deliveryDate) => _deliveryDate = deliveryDate;
+
+  set finished(bool finished) => _finished = finished;
+
+  set spentTime(double? time) => _spentTime = time;
+
   String get name => _name;
 
   List<Task> get tasks => _tasks;
 
-  double? get price => _price;
+  double get price => _price;
 
   DateTime? get deliveryDate => _deliveryDate;
 
@@ -68,5 +82,12 @@ class Project{
   bool get finished => _finished;
 
   bool get hourlyRate => _hourlyRate;
+
+   String spentTimeAsText(){
+    if(_spentTime == null || _spentTime == 0) return "Nenhum";
+    List<String> tempos = _spentTime.toString().split('.');
+    double minutos = tempos.length == 2? double.parse(tempos.elementAt(1).substring(0,2)) : 0;
+    return "${tempos.elementAt(0)}H ${minutos}M";
+  }
    
 }
