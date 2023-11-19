@@ -1,7 +1,7 @@
 class Task {
   String _name;
-  DateTime _initialDate;
-  DateTime? _finalDate;
+  DateTime? _initialDate; //data de início
+  DateTime? _finalDate; //prazo
   double? _hour;
   bool _isCompleted = false;
 
@@ -16,7 +16,8 @@ class Task {
   String get name => _name;
 
   String getInitialDateAsText(){
-    return "${_initialDate.day}/${_initialDate.month > 9? _initialDate.month : "0${_initialDate.month.toString()}"}/${_initialDate.year} ${_initialDate.hour > 9 ? _initialDate.hour : "0${_initialDate.hour.toString()}"}:${_initialDate.minute > 9 ? _initialDate.minute : "0${_initialDate.minute}"}";
+    if(_initialDate == null) return "";
+    return "${_initialDate!.day}/${_initialDate!.month > 9? _initialDate!.month : "0${_initialDate!.month.toString()}"}/${_initialDate!.year} ${_initialDate!.hour > 9 ? _initialDate!.hour : "0${_initialDate!.hour.toString()}"}:${_initialDate!.minute > 9 ? _initialDate!.minute : "0${_initialDate!.minute}"}";
   }
 
   String getFinalDateAsText(){
@@ -31,7 +32,20 @@ class Task {
     return "${tempos.elementAt(0)}H ${minutos}M";
   }
 
-  DateTime get initialDate => _initialDate;
+  String getStatus(){
+    if(_isCompleted) {
+      return "Completa";
+    }
+    if(_finalDate != null && _finalDate!.compareTo(DateTime.now()) < 0){
+      return "Atrasada";
+    }
+    if(_initialDate == null) {
+      return "Pendente";
+    }
+    return "Em andamento";
+  }
+
+  DateTime? get initialDate => _initialDate;
 
   DateTime? get finalDate => _finalDate;
 
@@ -45,7 +59,7 @@ class Task {
 
   set name(String name) => _name = name;
 
-  set initialDate(DateTime initialDate) => _initialDate = initialDate;
+  set initialDate(DateTime? initialDate) => _initialDate = initialDate;
 
   set finalDate(DateTime? finalDate) => _finalDate = finalDate;
 }

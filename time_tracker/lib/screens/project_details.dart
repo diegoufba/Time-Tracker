@@ -35,12 +35,19 @@ class ProjectDetailsScreen extends ConsumerWidget {
       length: 2,
       child: Scaffold(
           appBar: AppBar(
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back),
+                 onPressed: () {
+                    Navigator.of(context).pop();
+                    ref.read(editProjectDetailsProvider.notifier).state = false;
+                 },
+              ),
               title: Text("Projeto ${project.name}"),
               bottom: const TabBar(tabs: [
                 Tab(
-                  child: Text("Detalhes"),
+                  child: Text("Tarefas"),
                 ),
-                Tab(child: Text("Tarefas"))
+                Tab(child: Text("Detalhes"))
               ])),
           body: SizedBox(
             width: MediaQuery.of(context).size.width,
@@ -49,6 +56,59 @@ class ProjectDetailsScreen extends ConsumerWidget {
               Expanded(
                   child: TabBarView(
                 children: [
+                  //--------------------------
+                  // TAB DE TAREFAS DO PROJETO
+                  //--------------------------
+                  Container(
+                    margin: const EdgeInsets.only(top: 10),
+                    child: Column(children: [
+                      project.tasks.isNotEmpty
+                          ? ListView.builder(
+                              scrollDirection: Axis.vertical,
+                              shrinkWrap: true,
+                              itemCount: project.tasks.length,
+                              itemBuilder: (context, index) {
+                                return Card(
+                                    child: ListTile(
+                                        title: Text(project.tasks
+                                            .elementAt(index)
+                                            .name),
+                                        subtitle: Text(project.tasks.elementAt(index).getStatus(),
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                backgroundColor: getTaskStatusColor(
+                                                    project.tasks
+                                                        .elementAt(index)
+                                                        .getStatus()))),
+                                        trailing:
+                                            const Icon(Icons.arrow_forward),
+                                        onTap: () => Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => TaskDetails(
+                                                    project: project,
+                                                    task: project.tasks
+                                                        .elementAt(index))))));
+                              })
+                          : const Text("Nenhuma tarefa no projeto"),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SizedBox(
+                          width: double.infinity,
+                          height: 40,
+                          child: ElevatedButton(
+                              onPressed: () => {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                TaskForm(project: project)))
+                                  },
+                              child: const Text("Criar Tarefa")),
+                        ),
+                      )
+                    ]),
+                  ),
                   //--------------------------
                   // TAB DE DETALHES DO PROJETO
                   //--------------------------
@@ -129,6 +189,29 @@ class ProjectDetailsScreen extends ConsumerWidget {
                         SizedBox(
                             width: 250,
                             child: TextFormField(
+                                readOnly: !editProjectDetails,
+                                controller:
+                                    TextEditingController(text: project.estimatedTime != null? project.estimatedTime.toString() : "Indefinido"),
+                                validator: (value) {
+                                  if (value != null && value.isNotEmpty) {
+                                    double? aux = double.tryParse(value);
+                                    if (aux == null || aux <= 0) {
+                                      return 'Por favor, digite um tempo válido';
+                                    }
+                                    project.estimatedTime = aux;
+                                  }
+                                  return null;
+                                },
+                                decoration: InputDecoration(
+                                  border: const OutlineInputBorder(),
+                                  labelText: editProjectDetails
+                                      ? 'Tempo estimado (em horas)'
+                                      : 'Tempo estimado',
+                                ))),
+                        const SizedBox(height: 30),
+                        SizedBox(
+                            width: 250,
+                            child: TextFormField(
                               enabled: editProjectDetails,
                               controller: deadlineDateController,
                               decoration: const InputDecoration(
@@ -166,6 +249,16 @@ class ProjectDetailsScreen extends ConsumerWidget {
                                   labelText: 'Data de entrega',
                                 ),
                                 readOnly: !editProjectDetails,
+                                validator: (String? value) {
+                                  if (project.deliveryDate != null) {
+                                    if (project.deliveryDate!
+                                            .compareTo(project.deadlineDate!) <
+                                        0) {
+                                      return 'Data de entrega inválida';
+                                    }
+                                  }
+                                  return null;
+                                },
                                 onTap: () async {
                                   DateTime? initialDateTime =
                                       await pickOnlyDate(context);
@@ -265,60 +358,6 @@ class ProjectDetailsScreen extends ConsumerWidget {
                         ]
                       ]),
                     ),
-                  ),
-
-                  //--------------------------
-                  // TAB DE TAREFAS DO PROJETO
-                  //--------------------------
-                  Container(
-                    margin: const EdgeInsets.only(top: 10),
-                    child: Column(children: [
-                      project.tasks.isNotEmpty
-                          ? ListView.builder(
-                              scrollDirection: Axis.vertical,
-                              shrinkWrap: true,
-                              itemCount: project.tasks.length,
-                              itemBuilder: (context, index) {
-                                return Card(
-                                    child: ListTile(
-                                        title: Text(project.tasks
-                                            .elementAt(index)
-                                            .name),
-                                        subtitle: Text(project.tasks.elementAt(index).isCompleted ? "Completo" : "Incompleto",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                backgroundColor: project.tasks
-                                                        .elementAt(index)
-                                                        .isCompleted
-                                                    ? Colors.greenAccent[400]
-                                                    : Colors.amber.shade700)),
-                                        trailing:
-                                            const Icon(Icons.arrow_forward),
-                                        onTap: () => Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) => TaskDetails(
-                                                    project: project,
-                                                    task: project.tasks.elementAt(index))))));
-                              })
-                          : const Text("Nenhuma tarefa no projeto"),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: SizedBox(
-                          width: double.infinity,
-                          height: 40,
-                          child: ElevatedButton(
-                              onPressed: () => {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                TaskForm(project: project)))
-                                  },
-                              child: const Text("Criar Tarefa")),
-                        ),
-                      )
-                    ]),
                   ),
                 ],
               ))

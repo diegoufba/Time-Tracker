@@ -31,7 +31,7 @@ class ProjectForm extends ConsumerWidget {
               children: <Widget>[
                 TextFormField(
                   decoration: const InputDecoration(
-                    hintText: 'Nome do projeto',
+                    hintText: 'Nome do projeto*',
                   ),
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
@@ -43,7 +43,7 @@ class ProjectForm extends ConsumerWidget {
                 ),
                 TextFormField(
                   decoration: const InputDecoration(
-                    hintText: 'Preço do Projeto',
+                    hintText: 'Preço do Projeto*',
                   ),
                   keyboardType: TextInputType.number,
                   validator: (value) {
@@ -64,14 +64,13 @@ class ProjectForm extends ConsumerWidget {
                   ),
                   keyboardType: TextInputType.number,
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor, digite um tempo ';
+                    if(value != null && value.isNotEmpty){
+                      double? aux = double.tryParse(value);
+                      if(aux == null || aux <= 0) {
+                        return 'Por favor, digite um tempo válido';
+                      }
+                      estimatedTimeProject = aux;
                     }
-                    double? aux = double.tryParse(value);
-                    if (aux == null || aux <= 0) {
-                      return 'Por favor, digite um tempo válido';
-                    }
-                    estimatedTimeProject = aux;
                     return null;
                   },
                 ),
@@ -94,7 +93,7 @@ class ProjectForm extends ConsumerWidget {
                   controller: deadlineDateController,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
-                    labelText: 'Prazo',
+                    labelText: 'Prazo*',
                   ),
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {

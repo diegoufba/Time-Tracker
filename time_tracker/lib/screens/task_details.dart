@@ -30,6 +30,13 @@ class TaskDetails extends ConsumerWidget {
         length: 2,
         child: Scaffold(
           appBar: AppBar(
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back),
+                 onPressed: () {
+                    ref.read(editTaskDetailsProvider.notifier).state = false;
+                    Navigator.of(context).pop();
+                 },
+              ),
               title: Text("Tarefa ${task.name}"),
               bottom: const TabBar(tabs: [
                 Tab(
@@ -92,7 +99,7 @@ class TaskDetails extends ConsumerWidget {
                         SizedBox(
                             width: 250,
                             child: TextFormField(
-                                readOnly: !editTaskDetails,
+                                enabled: editTaskDetails,
                                 onTap: () async {
                                   DateTime? initialDateTime =
                                       await pickDateTime(context);
@@ -106,8 +113,13 @@ class TaskDetails extends ConsumerWidget {
                                 },
                                 controller: initialDateController,
                                 validator: (String? value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Informe o início';
+                                  if (task.initialDate != null &&
+                                      task.finalDate != null) {
+                                    if (task.finalDate!
+                                            .compareTo(task.initialDate!) <
+                                        0) {
+                                      return 'Início superior ao prazo';
+                                    }
                                   }
                                   return null;
                                 },
@@ -119,7 +131,18 @@ class TaskDetails extends ConsumerWidget {
                         SizedBox(
                             width: 250,
                             child: TextFormField(
-                                readOnly: !editTaskDetails,
+                                enabled: editTaskDetails,
+                                validator: (String? value) {
+                                  if (task.finalDate != null &&
+                                      task.initialDate != null) {
+                                    if (task.finalDate!
+                                            .compareTo(task.initialDate!) <
+                                        0) {
+                                      return 'Prazo inferior ao início';
+                                    }
+                                  }
+                                  return null;
+                                },
                                 onTap: () async {
                                   DateTime? initialDateTime =
                                       await pickDateTime(context);
@@ -150,31 +173,28 @@ class TaskDetails extends ConsumerWidget {
                                       : 'Tempo gasto',
                                 ))),
                         const SizedBox(height: 30),
-                        SizedBox(
-                            width: 250,
-                            child: TextFormField(
-                                readOnly: !editTaskDetails,
-                                controller: TextEditingController(
-                                    text: task.isCompleted
-                                        ? "Completa"
-                                        : "Incompleta"),
-                                style: TextStyle(
-                                    color: task.isCompleted
-                                        ? Colors.greenAccent[400]
-                                        : Colors.amber.shade700),
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  labelText: 'Status',
-                                ))),
-                        const SizedBox(height: 30),
                         if (!editTaskDetails) ...[
+                          SizedBox(
+                              width: 250,
+                              child: TextFormField(
+                                  readOnly: true,
+                                  controller: TextEditingController(
+                                      text: task.getStatus()),
+                                  style: TextStyle(
+                                      color:
+                                          getTaskStatusColor(task.getStatus())),
+                                  decoration: const InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    labelText: 'Status',
+                                  ))),
+                          const SizedBox(height: 30),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               ElevatedButton.icon(
                                 onPressed: () {
                                   task.isCompleted = !task.isCompleted;
-                                  updateProjectTask(ref, project, task,false);
+                                  updateProjectTask(ref, project, task, false);
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(SnackBar(
                                     content: Text(task.isCompleted
@@ -222,7 +242,7 @@ class TaskDetails extends ConsumerWidget {
                           ElevatedButton.icon(
                             onPressed: () {
                               if (formKey.currentState!.validate()) {
-                                updateProjectTask(ref, project, task,true);
+                                updateProjectTask(ref, project, task, true);
                               }
                             },
                             icon: const Icon(Icons.check_box_rounded),

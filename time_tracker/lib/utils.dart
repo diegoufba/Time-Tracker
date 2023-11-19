@@ -41,3 +41,14 @@ Future<TimeOfDay?> pickTime(BuildContext context, DateTime timeNow) =>
       cancelText: "Cancelar",
       errorInvalidText: "Texto inválido",
     );
+
+Color getTaskStatusColor(String status){
+  switch(status){
+    case "Pendente": return Colors.grey.shade300;
+    case "Em andamento": return Colors.amber.shade700;
+    case "Completa": return Colors.greenAccent.shade400;
+    case "Atrasada": return Colors.red.shade200;
+    default: return Colors.black;
+  }
+}
+  

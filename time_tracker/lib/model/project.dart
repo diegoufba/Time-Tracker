@@ -3,8 +3,8 @@ import 'package:time_tracker/model/task.dart';
 class Project{
    String _name;
    double _price = 0;
-   DateTime? _deliveryDate;
-   DateTime? _deadlineDate;
+   DateTime? _deliveryDate; //data que foi entregue
+   DateTime _deadlineDate; //prazo
    double? _spentTime;
    double? _estimatedTime;
    bool _finished = false;
@@ -36,11 +36,7 @@ class Project{
   }
 
   String getDeadLineDateAsText(){
-    if(_deadlineDate != null){
-      // return "${_deadlineDate!.day}/${_deadlineDate!.month > 9? _deadlineDate!.month : "0${_deadlineDate!.month.toString()}"}/${_deadlineDate!.year} ${_deadlineDate!.hour > 9 ? _deadlineDate!.hour : "0${_deadlineDate!.hour.toString()}"}:${_deadlineDate!.minute > 9 ? _deadlineDate!.minute : "0${_deadlineDate!.minute}"}";
-      return "${_deadlineDate!.day}/${_deadlineDate!.month > 9? _deadlineDate!.month : "0${_deadlineDate!.month.toString()}"}/${_deadlineDate!.year}";
-    }
-    return "";
+    return "${_deadlineDate.day}/${_deadlineDate.month > 9? _deadlineDate.month : "0${_deadlineDate.month.toString()}"}/${_deadlineDate.year}";
   }
 
   String getDeliveryDateAsText(){
@@ -52,7 +48,7 @@ class Project{
   }
 
   static Project fromObj(Project obj){
-    return Project(obj.name, obj.price, obj.deliveryDate, obj.deadlineDate, obj.spentTime, obj.estimatedTime, obj.finished, obj.hourlyRate, obj.tasks);
+    return Project(obj.name, obj.price, obj.deliveryDate, obj.deadlineDate!, obj.spentTime, obj.estimatedTime, obj.finished, obj.hourlyRate, obj.tasks);
   }
 
   set name(String name) => _name = name;
@@ -61,7 +57,7 @@ class Project{
 
   set hourlyRate(bool hourlyRate) => _hourlyRate = hourlyRate;
 
-  set deadlineDate(DateTime? deadlineDate) => _deadlineDate = deadlineDate;
+  set deadlineDate(DateTime deadlineDate) => _deadlineDate = deadlineDate;
 
   set deliveryDate(DateTime? deliveryDate) => _deliveryDate = deliveryDate;
 
@@ -71,6 +67,8 @@ class Project{
 
   set tasks(List<Task> tasks) => _tasks = tasks;
 
+  set estimatedTime(double? estimatedTime) => _estimatedTime = estimatedTime;
+
   String get name => _name;
 
   List<Task> get tasks => _tasks;
@@ -79,7 +77,7 @@ class Project{
 
   DateTime? get deliveryDate => _deliveryDate;
 
-  DateTime? get deadlineDate => _deadlineDate;
+  DateTime get deadlineDate => _deadlineDate;
 
   double? get spentTime => _spentTime;
   

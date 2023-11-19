@@ -29,7 +29,7 @@ class TaskForm extends ConsumerWidget {
             children: <Widget>[
               TextFormField(
                 decoration: const InputDecoration(
-                  hintText: 'Digite o nome da sua Tarefa',
+                  hintText: 'Nome da Tarefa *',
                 ),
                 validator: (String? value) {
                   if (value == null || value.isEmpty) {
@@ -44,13 +44,10 @@ class TaskForm extends ConsumerWidget {
                 controller: intitialDateController,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'Data inicial',
+                  labelText: 'Data de início',
                 ),
                 readOnly: true,
                 validator: (String? value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Informe a data inicial';
-                  }
                   return null;
                 },
                 onTap: () async {
@@ -69,15 +66,12 @@ class TaskForm extends ConsumerWidget {
                 controller: finalDateController,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'Data Final',
+                  labelText: 'Prazo',
                 ),
                 validator: (String? value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Informe a data final';
-                  }
                   if (initialDateTask != null && finalDateTask != null) {
                     if (finalDateTask!.compareTo(initialDateTask!) < 0) {
-                      return 'Data final inválida';
+                      return 'Prazo inválido';
                     }
                   }
                   return null;
@@ -104,8 +98,8 @@ class TaskForm extends ConsumerWidget {
                       if (formKey.currentState!.validate()) {
                         List<Project> projetosDeepCopy = List.from(
                             ref.read(projectsProvider.notifier).state);
-                        Task newTask = Task(taskName, initialDateTask!,
-                            finalDateTask!, 0, false);
+                        Task newTask = Task(taskName, initialDateTask,
+                            finalDateTask, 0, false);
                         int i = projetosDeepCopy.indexOf(project);
                         projetosDeepCopy.elementAt(i).addTask(newTask);
                         ref.read(projectsProvider.notifier).state =
