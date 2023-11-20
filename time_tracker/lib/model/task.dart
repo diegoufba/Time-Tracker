@@ -2,7 +2,7 @@ class Task {
   String _name;
   DateTime? _initialDate; //data de início
   DateTime? _finalDate; //prazo
-  double? _hour;
+  final double? _hour;
   bool _isCompleted = false;
 
   Task(this._name, this._initialDate, this._finalDate, this._hour, bool? isCompleted){

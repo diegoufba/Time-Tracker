@@ -5,6 +5,7 @@ import 'package:time_tracker/model/project.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:time_tracker/screens/task_details.dart';
 import 'package:time_tracker/screens/task_form.dart';
+import 'package:time_tracker/screens/report.dart';
 import 'package:time_tracker/utils.dart';
 
 // final projectChangeProvider = StateProvider((ref) => false);
@@ -23,7 +24,7 @@ class ProjectDetailsScreen extends ConsumerWidget {
     List<String> chargeOptions = ["Valor fixo", "Por hora"];
     final deadlineDateController = TextEditingController(
         text: project.deadlineDate != null
-            ? DateFormat('dd/MM/yyyy').format(project.deadlineDate!).toString()
+            ? DateFormat('dd/MM/yyyy').format(project.deadlineDate).toString()
             : "");
     final deliveryDateController = TextEditingController(
         text: project.deliveryDate != null
@@ -37,10 +38,10 @@ class ProjectDetailsScreen extends ConsumerWidget {
           appBar: AppBar(
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back),
-                 onPressed: () {
-                    Navigator.of(context).pop();
-                    ref.read(editProjectDetailsProvider.notifier).state = false;
-                 },
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  ref.read(editProjectDetailsProvider.notifier).state = false;
+                },
               ),
               title: Text("Projeto ${project.name}"),
               bottom: const TabBar(tabs: [
@@ -190,8 +191,10 @@ class ProjectDetailsScreen extends ConsumerWidget {
                             width: 250,
                             child: TextFormField(
                                 readOnly: !editProjectDetails,
-                                controller:
-                                    TextEditingController(text: project.estimatedTime != null? project.estimatedTime.toString() : "Indefinido"),
+                                controller: TextEditingController(
+                                    text: project.estimatedTime != null
+                                        ? project.estimatedTime.toString()
+                                        : "Indefinido"),
                                 validator: (value) {
                                   if (value != null && value.isNotEmpty) {
                                     double? aux = double.tryParse(value);
@@ -252,7 +255,7 @@ class ProjectDetailsScreen extends ConsumerWidget {
                                 validator: (String? value) {
                                   if (project.deliveryDate != null) {
                                     if (project.deliveryDate!
-                                            .compareTo(project.deadlineDate!) <
+                                            .compareTo(project.deadlineDate) <
                                         0) {
                                       return 'Data de entrega inválida';
                                     }
@@ -329,6 +332,17 @@ class ProjectDetailsScreen extends ConsumerWidget {
                                 icon: const Icon(Icons.delete_outlined),
                                 label: const Text("Deletar"),
                               ),
+                              const SizedBox(width: 20),
+                              ElevatedButton.icon(
+                                  onPressed: () => {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    Report(project: project)))
+                                      },
+                                  icon: const Icon(Icons.note),
+                                  label: const Text("Exibir Relatório"))
                             ],
                           ),
                         ],
