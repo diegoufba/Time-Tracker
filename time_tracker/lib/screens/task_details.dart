@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:time_tracker/main.dart';
 import 'package:time_tracker/model/project.dart';
 import 'package:time_tracker/model/task.dart';
+import 'package:time_tracker/screens/widgets/task_watch.dart';
 import 'package:time_tracker/utils.dart';
 
 final taskStatusProvider = StateProvider((ref) => false);
@@ -54,20 +55,13 @@ class TaskDetails extends ConsumerWidget {
                   //--------------------------
                   // TAB DE CRONOMETRO DA TAREFA
                   //--------------------------
-                  Center(
-                      child: Column(children: [
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          content: Text("Cronometro Não Implementado"),
-                          duration: Duration(milliseconds: 1000),
-                        ));
-                      },
-                      icon: const Icon(Icons.access_alarm),
-                      label: const Text("Cronômetro da tarefa"),
-                    ),
-                  ])),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const SizedBox(height: 60),
+                      TaskWatch(),
+                      ],
+                  ),
 
                   //--------------------------
                   // TAB DE DETALHES DA TAREFA
