@@ -48,7 +48,7 @@ class Project{
   }
 
   static Project fromObj(Project obj){
-    return Project(obj.name, obj.price, obj.deliveryDate, obj.deadlineDate!, obj.spentTime, obj.estimatedTime, obj.finished, obj.hourlyRate, obj.tasks);
+    return Project(obj.name, obj.price, obj.deliveryDate, obj.deadlineDate, obj.spentTime, obj.estimatedTime, obj.finished, obj.hourlyRate, obj.tasks);
   }
 
   set name(String name) => _name = name;
