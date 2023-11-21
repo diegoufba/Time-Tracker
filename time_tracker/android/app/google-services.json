@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "341374016835",
+    "project_id": "issue-tracker-2d84e",
+    "storage_bucket": "issue-tracker-2d84e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:341374016835:android:9116c0ef96113a26af23f6",
+        "android_client_info": {
+          "package_name": "com.example.time_tracker"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvplCq_0pqVKIr4QpKJ2ExKHYmsNaLB9g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

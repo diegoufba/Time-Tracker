@@ -4,8 +4,16 @@ import 'package:time_tracker/model/task.dart';
 import 'package:time_tracker/screens/projects.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() => runApp(const ProviderScope(child: MyApp()));
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(const ProviderScope(child: MyApp()));
+}
 
 final projectsProvider = StateProvider((ref) => [
       Project("Desenvolvimento App mobile", 1300, null,
@@ -16,7 +24,7 @@ final projectsProvider = StateProvider((ref) => [
             DateTime.parse("2023-11-30"), 48, false),
         Task("Definir Classes", DateTime.parse("2023-10-10"),
             DateTime.parse("2023-10-15"), 48, false),
-        Task("Adicionar estilos", null,null, 48, false),
+        Task("Adicionar estilos", null, null, 48, false),
       ]),
       Project("Criação Sistema Web", 80, null, DateTime.parse("2023-12-25"),
           102, 306, false, true, [
