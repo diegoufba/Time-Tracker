@@ -39,45 +39,47 @@ class Report extends ConsumerWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                project.name,
-                style: TextStyle(fontSize: 40),
+        child: SingleChildScrollView (
+          child: Column(
+            children: [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  project.name,
+                  style: TextStyle(fontSize: 40),
+                ),
               ),
-            ),
-            const SizedBox(height: 40),
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text("TEMPO ESTIMADO"),
-            ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "${project.estimatedTime} horas",
-                style: TextStyle(fontWeight: FontWeight.bold),
+              const SizedBox(height: 40),
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: Text("TEMPO ESTIMADO"),
               ),
-            ),
-            const SizedBox(height: 20),
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text("TEMPO GASTO"),
-            ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "${project.spentTime} horas",
-                style: TextStyle(fontWeight: FontWeight.bold),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "${project.estimatedTime} horas",
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-            PieChart(
-              dataMap: dataMap,
-              chartRadius: MediaQuery.of(context).size.width / 3.2,
-            ),
-          ],
+              const SizedBox(height: 20),
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: Text("TEMPO GASTO"),
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "${project.spentTime} horas",
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+              const SizedBox(height: 20),
+              PieChart(
+                dataMap: dataMap,
+                chartRadius: MediaQuery.of(context).size.width / 4.2,
+              ),
+            ],
+          ),
         ),
       ),
     );

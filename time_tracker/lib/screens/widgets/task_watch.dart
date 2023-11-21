@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final stopwatchModeProvider = StateProvider((ref) => true);
-final timeProvider = StateProvider((ref) => '00:00:00');
+final timeProvider = StateProvider((ref) => '00:00');
 final isPausedProvider = StateProvider((ref) => false);
 
 class TaskWatch extends ConsumerWidget {
@@ -15,7 +15,8 @@ class TaskWatch extends ConsumerWidget {
   late Timer _timer;
 
   String parseElapsedTime(){
-    return '${_stopwatch.elapsed.inMinutes.toString().padLeft(2, '0')}:${(_stopwatch.elapsed.inSeconds % 60).toString().padLeft(2, '0')}:${(_stopwatch.elapsed.inMilliseconds % 100).toString().padLeft(2, '0')}';
+    // return '${_stopwatch.elapsed.inMinutes.toString().padLeft(2, '0')}:${(_stopwatch.elapsed.inSeconds % 60).toString().padLeft(2, '0')}:${(_stopwatch.elapsed.inMilliseconds % 100).toString().padLeft(2, '0')}';
+    return '${_stopwatch.elapsed.inMinutes.toString().padLeft(2, '0')}:${(_stopwatch.elapsed.inSeconds % 60).toString().padLeft(2, '0')}';
   }
 
   @override
@@ -38,7 +39,7 @@ class TaskWatch extends ConsumerWidget {
       _timer.cancel();
       _stopwatch.stop();
       if(isPaused){
-
+        
       }
       ref.read(isPausedProvider.notifier).state = !isPaused;
     }
@@ -47,7 +48,8 @@ class TaskWatch extends ConsumerWidget {
       _stop();
       _duration = _stopwatch.elapsed;
       _stopwatch.reset();
-      ref.read(timeProvider.notifier).state = '00:00:00';
+      ref.read(isPausedProvider.notifier).state = false;
+      ref.read(timeProvider.notifier).state = '00:00';
     }
 
     void changeTimeMode(){
@@ -59,7 +61,7 @@ class TaskWatch extends ConsumerWidget {
         if(isStopWatch) {
         ref.read(timeProvider.notifier).state = '25:00';
         }else{
-          ref.read(timeProvider.notifier).state = '00:00:00';
+          ref.read(timeProvider.notifier).state = '00:00';
         }
       }
       _backupwatch = _stopwatch;
@@ -102,7 +104,7 @@ class TaskWatch extends ConsumerWidget {
           children: [
             ElevatedButton.icon(
               onPressed: _start,
-              label: const Text("Iniciar"),
+              label: Text(isPaused? "Continuar" : "Iniciar"),
               icon: const Icon(Icons.play_arrow_rounded),
             ),
             ElevatedButton.icon(
@@ -111,6 +113,7 @@ class TaskWatch extends ConsumerWidget {
               icon: Icon(isPaused? Icons.stop_circle_outlined : Icons.pause_rounded),
               style: ElevatedButton.styleFrom(backgroundColor: Colors.red[400]),
             ),
+            if(isStopWatch) ...[
             ElevatedButton.icon(
               onPressed: _reset,
               label: const Text("Reiniciar"),
@@ -118,6 +121,7 @@ class TaskWatch extends ConsumerWidget {
               style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.greenAccent[400]),
             ),
+            ]
           ],
         ),
       ],
