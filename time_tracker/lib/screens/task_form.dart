@@ -99,7 +99,7 @@ class TaskForm extends ConsumerWidget {
                         List<Project> projetosDeepCopy = List.from(
                             ref.read(projectsProvider.notifier).state);
                         Task newTask = Task(taskName, initialDateTask,
-                            finalDateTask, 0, false);
+                            finalDateTask, Duration(), false);
                         int i = projetosDeepCopy.indexOf(project);
                         projetosDeepCopy.elementAt(i).addTask(newTask);
                         ref.read(projectsProvider.notifier).state =

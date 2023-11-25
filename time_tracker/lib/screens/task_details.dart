@@ -27,6 +27,12 @@ class TaskDetails extends ConsumerWidget {
         text: task.finalDate != null ? task.getFinalDateAsText() : "");
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
+    void updateTaskTime(Duration spentTime){
+      task.addSpentTime(spentTime);
+      updateProjectTask(ref,project,task,false);
+    }
+
+
     return DefaultTabController(
         length: 2,
         child: Scaffold(
@@ -59,7 +65,7 @@ class TaskDetails extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const SizedBox(height: 60),
-                      TaskWatch(),
+                      TaskWatch(task: task, project: project,),
                       ],
                   ),
 
@@ -256,6 +262,8 @@ class TaskDetails extends ConsumerWidget {
 
 updateProjectTask(
     WidgetRef ref, Project project, Task task, bool toogleEditMode) {
+      print("CALLED");
+      print("${task.spentTime!.inSeconds/60} : ${task.spentTime!.inSeconds}");
   final List<Project> projetosDeepCopy =
       List.from(ref.read(projectsProvider.notifier).state);
   int iProject = projetosDeepCopy.indexOf(project);

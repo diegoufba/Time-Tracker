@@ -11,17 +11,17 @@ final projectsProvider = StateProvider((ref) => [
       Project("Desenvolvimento App mobile", 1300, null,
           DateTime.parse("2023-11-30"), 30, 72, false, false, [
         Task("Definir Telas", DateTime.parse("2023-09-20"),
-            DateTime.parse("2023-09-30"), 12.23, true),
+            DateTime.parse("2023-09-30"),  const Duration(hours: 12, minutes: 23), true),
         Task("Desenvolver Telas", DateTime.parse("2023-10-10"),
-            DateTime.parse("2023-11-30"), 48, false),
+            DateTime.parse("2023-11-30"), const Duration(hours: 48), false),
         Task("Definir Classes", DateTime.parse("2023-10-10"),
-            DateTime.parse("2023-10-15"), 48, false),
-        Task("Adicionar estilos", null,null, 48, false),
+            DateTime.parse("2023-10-15"), const Duration(hours: 48), false),
+        Task("Adicionar estilos", null,null, const Duration(hours: 48), false),
       ]),
       Project("Criação Sistema Web", 80, null, DateTime.parse("2023-12-25"),
           102, 306, false, true, [
         Task("Criação de rotas", DateTime.parse("2023-09-20"),
-            DateTime.parse("2023-09-30"), 15, true),
+            DateTime.parse("2023-09-30"), const Duration(hours: 15), true),
       ]),
       Project(
           "Mapeamento Relacional de Negócio",

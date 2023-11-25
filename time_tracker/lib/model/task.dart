@@ -2,10 +2,10 @@ class Task {
   String _name;
   DateTime? _initialDate; //data de início
   DateTime? _finalDate; //prazo
-  final double? _hour;
+  Duration? _spentTime;
   bool _isCompleted = false;
 
-  Task(this._name, this._initialDate, this._finalDate, this._hour, bool? isCompleted){
+  Task(this._name, this._initialDate, this._finalDate, this._spentTime, bool? isCompleted){
     _isCompleted = isCompleted ?? false;
   }
 
@@ -26,8 +26,8 @@ class Task {
   }
 
   String getHourAsText(){
-    if(_hour == null || _hour == 0) return "Nenhum";
-    List<String> tempos = _hour.toString().split('.');
+    if(_spentTime == null || _spentTime == 0) return "Nenhum";
+    List<String> tempos = _spentTime.toString().split('.');
     double minutos = tempos.length == 2? double.parse(tempos.elementAt(1).substring(0,2)) : 0;
     return "${tempos.elementAt(0)}H ${minutos}M";
   }
@@ -45,13 +45,21 @@ class Task {
     return "Em andamento";
   }
 
+  void addSpentTime(Duration time){
+    if(_spentTime != null){
+      _spentTime = _spentTime! + time;
+    }else{
+      _spentTime = time;
+    }
+  }
+
   DateTime? get initialDate => _initialDate;
 
   DateTime? get finalDate => _finalDate;
 
   bool get isCompleted => _isCompleted;
 
-  double? get hour => _hour;
+  Duration? get spentTime => _spentTime;
 
   set isCompleted(bool isCompleted){
     _isCompleted = isCompleted;
@@ -62,4 +70,6 @@ class Task {
   set initialDate(DateTime? initialDate) => _initialDate = initialDate;
 
   set finalDate(DateTime? finalDate) => _finalDate = finalDate;
+
+  set spentTime(Duration? spentTime) => _spentTime = spentTime;
 }
