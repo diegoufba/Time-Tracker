@@ -38,7 +38,7 @@ class TaskWatch extends ConsumerWidget {
 
   Stopwatch _stopwatch = Stopwatch();
   Stopwatch? _backupwatch;
-  late Timer _timer;
+  Timer _timer = Timer(Duration.zero, () { });
   Duration pomodoroDuration = const Duration(minutes: 1);
 
   String parseElapsedTime(bool stopWatchMode){
@@ -94,6 +94,7 @@ class TaskWatch extends ConsumerWidget {
             t.cancel();
             ref.read(watchStateProvider.notifier).state = 0;
             task.addSpentTime(_stopwatch.elapsed);
+            project.addSpentTime(_stopwatch.elapsed);
             _stopwatch.reset();
             updateProjectTask(ref,project,task,false);
             if(pomodoroDuration.inMinutes == 25){

@@ -9,7 +9,7 @@ void main() => runApp(const ProviderScope(child: MyApp()));
 
 final projectsProvider = StateProvider((ref) => [
       Project("Desenvolvimento App mobile", 1300, null,
-          DateTime.parse("2023-11-30"), 30, 72, false, false, [
+          DateTime.parse("2023-11-30"), const Duration(hours: 147, minutes: 23), 130, false, false, [
         Task("Definir Telas", DateTime.parse("2023-09-20"),
             DateTime.parse("2023-09-30"),  const Duration(hours: 12, minutes: 23), true),
         Task("Desenvolver Telas", DateTime.parse("2023-10-10"),
@@ -19,7 +19,7 @@ final projectsProvider = StateProvider((ref) => [
         Task("Adicionar estilos", null,null, const Duration(hours: 48), false),
       ]),
       Project("Criação Sistema Web", 80, null, DateTime.parse("2023-12-25"),
-          102, 306, false, true, [
+          const Duration(hours: 12, minutes: 25), 306, false, true, [
         Task("Criação de rotas", DateTime.parse("2023-09-20"),
             DateTime.parse("2023-09-30"), const Duration(hours: 15), true),
       ]),
@@ -28,7 +28,7 @@ final projectsProvider = StateProvider((ref) => [
           1200,
           DateTime.parse("2023-11-20"),
           DateTime.parse("2023-11-21"),
-          50,
+          const Duration(hours: 1),
           60,
           true,
           false,

@@ -17,20 +17,22 @@ class Report extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ref.watch(projectsProvider);
 
-    // Gera valores aleatorios para o tempo de cada tarefa
     Map<String, double> dataMap = {};
-
-    List<String> names = project.tasks.map((task) => task.name).toList();
-
-    Random random = Random();
-    double sum = 0;
-    for (int i = 0; i < names.length - 1; i++) {
-      double value = random.nextDouble() * (100 - sum);
-      sum += value;
-      dataMap[names[i]] = value;
+    if (project.tasks.isNotEmpty) {
+      double totalTime = 0;
+      for (var task in project.tasks) {
+        totalTime+=task.spentTime != null? task.spentTime!.inHours : 0;
+      }
+      double sum = 0;
+      for (var task in project.tasks) {
+        double value = task.spentTime != null
+            ? (task.spentTime!.inHours * 100)/totalTime
+            : 0;
+        sum += value;
+        dataMap[task.name] = value;
+      }
+      // dataMap[project.tasks.last.name] = 100 - sum;
     }
-    dataMap[names.last] = 100 - sum;
-
     // ***************************
 
     return Scaffold(
@@ -39,14 +41,14 @@ class Report extends ConsumerWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView (
+        child: SingleChildScrollView(
           child: Column(
             children: [
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   project.name,
-                  style: TextStyle(fontSize: 40),
+                  style: const TextStyle(fontSize: 40),
                 ),
               ),
               const SizedBox(height: 40),
@@ -69,15 +71,25 @@ class Report extends ConsumerWidget {
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  "${project.spentTime} horas",
+                  project.spentTime != null
+                      ? "${project.spentTime!.inHours} horas ${project.spentTime!.inMinutes % 60 != 0 ? "${project.spentTime!.inMinutes % 60} minutos" : ""}"
+                      : "",
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
               const SizedBox(height: 20),
-              PieChart(
-                dataMap: dataMap,
-                chartRadius: MediaQuery.of(context).size.width / 4.2,
-              ),
+              if (dataMap.isEmpty) ...[
+                const Text(
+                  "Nenhum registro de tempo",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                )
+              ],
+              if (dataMap.isNotEmpty) ...[
+                PieChart(
+                  dataMap: dataMap,
+                  chartRadius: MediaQuery.of(context).size.width / 4.2,
+                ),
+              ],
             ],
           ),
         ),

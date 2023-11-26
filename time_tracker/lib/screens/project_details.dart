@@ -293,9 +293,11 @@ class ProjectDetailsScreen extends ConsumerWidget {
                                         if (aux != null && aux < 0) {
                                           return 'Horas inválidas';
                                         }
-                                        project.spentTime = aux ?? 0;
+                                        if (aux != null){
+                                          project.spentTime = Duration(hours: aux.toInt(), minutes: (aux % 1 * 100).toInt() );
+                                        }
                                       }
-                                      project.spentTime = 0;
+                                      project.spentTime = Duration.zero;
                                       return null;
                                     },
                                     controller: TextEditingController(

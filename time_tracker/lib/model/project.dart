@@ -5,17 +5,16 @@ class Project{
    double _price = 0;
    DateTime? _deliveryDate; //data que foi entregue
    DateTime _deadlineDate; //prazo
-   double? _spentTime;
+   Duration? _spentTime;
    double? _estimatedTime;
    bool _finished = false;
    bool _hourlyRate = false;
    List<Task> _tasks = List.empty();
 
   Project(this._name, double? price, this._deliveryDate, 
-  this._deadlineDate, double? spentTime, this._estimatedTime,
+  this._deadlineDate, this._spentTime, this._estimatedTime,
   bool? finished, bool? hourlyRate, List<Task>? tasks){
     _price = price ?? _price;
-    _spentTime = spentTime ?? 0;
     _finished = finished ?? _finished;
     _hourlyRate = hourlyRate ?? _finished;
     _tasks = tasks ?? _tasks;
@@ -48,7 +47,15 @@ class Project{
   }
 
   static Project fromObj(Project obj){
-    return Project(obj.name, obj.price, obj.deliveryDate, obj.deadlineDate, obj.spentTime, obj.estimatedTime, obj.finished, obj.hourlyRate, obj.tasks);
+    return Project(obj.name, obj.price, obj.deliveryDate, obj.deadlineDate, obj._spentTime, obj.estimatedTime, obj.finished, obj.hourlyRate, obj.tasks);
+  }
+
+   void addSpentTime(Duration time){
+    if(_spentTime != null){
+      _spentTime = _spentTime! + time;
+    }else{
+      _spentTime = time;
+    }
   }
 
   set name(String name) => _name = name;
@@ -63,7 +70,7 @@ class Project{
 
   set finished(bool finished) => _finished = finished;
 
-  set spentTime(double? time) => _spentTime = time;
+  set spentTime(Duration? time) => _spentTime = time;
 
   set tasks(List<Task> tasks) => _tasks = tasks;
 
@@ -79,7 +86,7 @@ class Project{
 
   DateTime get deadlineDate => _deadlineDate;
 
-  double? get spentTime => _spentTime;
+  Duration? get spentTime => _spentTime;
   
   double? get estimatedTime => _estimatedTime;
 
