@@ -39,13 +39,22 @@ class TaskWatch extends ConsumerWidget {
   Stopwatch _stopwatch = Stopwatch();
   Stopwatch? _backupwatch;
   late Timer _timer;
+  Duration pomodoroDuration = const Duration(minutes: 1);
 
   String parseElapsedTime(bool stopWatchMode){
     if(stopWatchMode){
       return '${_stopwatch.elapsed.inMinutes.toString().padLeft(2, '0')}:${(_stopwatch.elapsed.inSeconds % 60).toString().padLeft(2, '0')}';
     }
-    Duration restTo25Minutes = const Duration(minutes: 25) - _stopwatch.elapsed;
-          return '${(restTo25Minutes.inMinutes).toString().padLeft(2, '0')}:${(restTo25Minutes.inSeconds % 60).toString().padLeft(2, '0')}';
+    Duration restToPomodoro = pomodoroDuration - _stopwatch.elapsed;
+          return '${(restToPomodoro.inMinutes).toString().padLeft(2, '0')}:${(restToPomodoro.inSeconds % 60).toString().padLeft(2, '0')}';
+  }
+
+  void stopAll(){
+    if(_timer != null){
+      _timer.cancel();
+    }
+    _stopwatch.stop();
+    _stopwatch.reset();
   }
 
   @override
@@ -81,12 +90,17 @@ class TaskWatch extends ConsumerWidget {
         _stopwatch.start();
         _timer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
           ref.read(timeProvider.notifier).state = parseElapsedTime(isStopWatch);
-          if(!isStopWatch && _stopwatch.elapsed.inMinutes >= 25){//pomodoro finishes
+          if(!isStopWatch && _stopwatch.elapsed.inMinutes >= pomodoroDuration.inMinutes){//pomodoro finishes
             t.cancel();
             ref.read(watchStateProvider.notifier).state = 0;
             task.addSpentTime(_stopwatch.elapsed);
             _stopwatch.reset();
             updateProjectTask(ref,project,task,false);
+            if(pomodoroDuration.inMinutes == 25){
+              pomodoroDuration = const Duration(minutes: 5);
+            }else{
+              pomodoroDuration = const Duration(minutes: 25);
+            }
             ref.read(timeProvider.notifier).state = parseElapsedTime(isStopWatch);
           }
         });
@@ -107,13 +121,19 @@ class TaskWatch extends ConsumerWidget {
 
     void handleResetButton() {
       _stopwatch.reset();
-      ref.read(timeProvider.notifier).state = parseElapsedTime(true);
+      if(!isStopWatch){
+        _stopwatch.stop();
+        ref.read(timeProvider.notifier).state = '25:00';
+        ref.read(watchStateProvider.notifier).state = 0;
+      }else{
+        ref.read(timeProvider.notifier).state = parseElapsedTime(true);
+      }
     }
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        if(watchState ==0 ) ...[
+        if(watchState ==0 ) ...[//change mode button
           OutlinedButton.icon(
           onPressed: () {
             changeTimeMode();
@@ -131,6 +151,9 @@ class TaskWatch extends ConsumerWidget {
                       ? Colors.deepPurple.shade300
                       : Colors.deepOrange.shade800)),
           ),
+        ],
+        if(pomodoroDuration.inMinutes == 5) ...[ //rest time message
+          const Text("Descanso")
         ],
         const SizedBox(height: 60),
         Text(
@@ -150,6 +173,7 @@ class TaskWatch extends ConsumerWidget {
               onPressed: () => handleMainButtonClick(false),
               label: Text(getMainButtonText(watchState)),
               icon: getMainButtonIcon(watchState),
+              style: ButtonStyle(backgroundColor: watchState == 2? MaterialStateProperty.all(Colors.red.shade300) : null),
             ),
             if(watchState == 2) ...[
               ElevatedButton.icon(

@@ -26,12 +26,12 @@ class TaskDetails extends ConsumerWidget {
     final finalDateController = TextEditingController(
         text: task.finalDate != null ? task.getFinalDateAsText() : "");
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+    TaskWatch taskWatchWidget = TaskWatch(task: task, project: project);
 
     void updateTaskTime(Duration spentTime){
       task.addSpentTime(spentTime);
       updateProjectTask(ref,project,task,false);
     }
-
 
     return DefaultTabController(
         length: 2,
@@ -41,6 +41,10 @@ class TaskDetails extends ConsumerWidget {
                 icon: const Icon(Icons.arrow_back),
                  onPressed: () {
                     ref.read(editTaskDetailsProvider.notifier).state = false;
+                    taskWatchWidget.stopAll();
+                    ref.read(watchStateProvider.notifier).state = 0;
+                    ref.read(timeProvider.notifier).state = '00:00';
+                    taskWatchWidget = TaskWatch(task: task, project: project);
                     Navigator.of(context).pop();
                  },
               ),
@@ -65,7 +69,7 @@ class TaskDetails extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const SizedBox(height: 60),
-                      TaskWatch(task: task, project: project,),
+                      taskWatchWidget,
                       ],
                   ),
 
@@ -262,8 +266,6 @@ class TaskDetails extends ConsumerWidget {
 
 updateProjectTask(
     WidgetRef ref, Project project, Task task, bool toogleEditMode) {
-      print("CALLED");
-      print("${task.spentTime!.inSeconds/60} : ${task.spentTime!.inSeconds}");
   final List<Project> projetosDeepCopy =
       List.from(ref.read(projectsProvider.notifier).state);
   int iProject = projetosDeepCopy.indexOf(project);
