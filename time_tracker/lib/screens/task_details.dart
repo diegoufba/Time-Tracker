@@ -163,6 +163,7 @@ class TaskDetails extends ConsumerWidget {
                                   border: OutlineInputBorder(),
                                   labelText: 'Prazo',
                                 ))),
+                        if (!editTaskDetails) ...[
                         const SizedBox(height: 30),
                         SizedBox(
                             width: 250,
@@ -170,12 +171,11 @@ class TaskDetails extends ConsumerWidget {
                                 readOnly: true,
                                 controller: TextEditingController(
                                     text: task.getHourAsText()),
-                                decoration: InputDecoration(
-                                  border: const OutlineInputBorder(),
-                                  labelText: editTaskDetails
-                                      ? 'Tempo gasto (em horas)'
-                                      : 'Tempo gasto',
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: 'Tempo gasto',
                                 ))),
+                        ],
                         const SizedBox(height: 30),
                         if (!editTaskDetails) ...[
                           SizedBox(

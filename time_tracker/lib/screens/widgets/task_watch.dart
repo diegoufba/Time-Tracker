@@ -114,6 +114,7 @@ class TaskWatch extends ConsumerWidget {
       else {//parar
         ref.read(watchStateProvider.notifier).state = 0;
         task.addSpentTime(_stopwatch.elapsed);
+        project.addSpentTime(_stopwatch.elapsed);
         _stopwatch.reset();
         updateProjectTask(ref,project,task,false);
         ref.read(timeProvider.notifier).state = parseElapsedTime(isStopWatch);

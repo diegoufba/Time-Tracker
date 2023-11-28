@@ -96,8 +96,8 @@ class Project{
 
    String spentTimeAsText(){
     if(_spentTime == null || _spentTime == 0) return "Nenhum";
-    List<String> tempos = _spentTime.toString().split('.');
-    double minutos = tempos.length == 2? double.parse(tempos.elementAt(1).substring(0,2)) : 0;
+    List<String> tempos = _spentTime.toString().split(':');
+    double minutos = tempos.length >= 2? double.parse(tempos.elementAt(1).substring(0,2)) : 0;
     return "${tempos.elementAt(0)}H ${minutos}M";
   }
    

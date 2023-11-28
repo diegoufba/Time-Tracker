@@ -18,21 +18,17 @@ final projectsProvider = StateProvider((ref) => [
             DateTime.parse("2023-10-15"), const Duration(hours: 48), false),
         Task("Adicionar estilos", null,null, const Duration(hours: 48), false),
       ]),
-      Project("Criação Sistema Web", 80, null, DateTime.parse("2023-12-25"),
-          const Duration(hours: 12, minutes: 25), 306, false, true, [
+      Project("Criação Sistema Web", 45, DateTime.parse("2023-10-01"), DateTime.parse("2023-10-05"),
+          const Duration(hours: 38, minutes: 25), 54, true, true, [
         Task("Criação de rotas", DateTime.parse("2023-09-20"),
-            DateTime.parse("2023-09-30"), const Duration(hours: 15), true),
+            DateTime.parse("2023-09-21"), const Duration(hours: 8, minutes: 25), true),
+        Task("Criação de telas", DateTime.parse("2023-09-22"),
+            DateTime.parse("2023-09-25"), const Duration(hours: 16), true),
+        Task("Integração com back-end", DateTime.parse("2023-09-26"),
+            DateTime.parse("2023-09-28"), const Duration(hours: 8), true),
+        Task("Melhorar estilos de componentes", DateTime.parse("2023-09-29"),
+            DateTime.parse("2023-10-01"), const Duration(hours: 6), true),
       ]),
-      Project(
-          "Mapeamento Relacional de Negócio",
-          1200,
-          DateTime.parse("2023-11-20"),
-          DateTime.parse("2023-11-21"),
-          const Duration(hours: 1),
-          60,
-          true,
-          false,
-          null),
     ]);
 
 class MyApp extends ConsumerWidget {

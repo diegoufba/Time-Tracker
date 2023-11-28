@@ -281,11 +281,12 @@ class ProjectDetailsScreen extends ConsumerWidget {
                                     }
                                   },
                                 )),
+                            if (!editProjectDetails) ...[
                             const SizedBox(height: 30),
                             SizedBox(
                                 width: 250,
                                 child: TextFormField(
-                                    readOnly: !editProjectDetails,
+                                    readOnly: true,
                                     keyboardType: TextInputType.number,
                                     validator: (value) {
                                       if (value != null && value.isNotEmpty) {
@@ -302,16 +303,12 @@ class ProjectDetailsScreen extends ConsumerWidget {
                                     },
                                     controller: TextEditingController(
                                         text: project.spentTime != null
-                                            ? (editProjectDetails
-                                                ? project.spentTime.toString()
-                                                : project.spentTimeAsText())
-                                            : "Nenhum"),
-                                    decoration: InputDecoration(
-                                      border: const OutlineInputBorder(),
-                                      labelText: editProjectDetails
-                                          ? "Tempo gasto (em horas)"
-                                          : 'Tempo gasto',
+                                            ?  project.spentTimeAsText() : "Nenhum"),
+                                    decoration: const InputDecoration(
+                                      border: OutlineInputBorder(),
+                                      labelText: 'Tempo gasto',
                                     ))),
+                          ],
                           ],
                           const SizedBox(height: 20),
                           if (!editProjectDetails) ...[
