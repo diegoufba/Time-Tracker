@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 
 Future<DateTime?> pickOnlyDate(BuildContext context) async {
@@ -42,13 +44,17 @@ Future<TimeOfDay?> pickTime(BuildContext context, DateTime timeNow) =>
       errorInvalidText: "Texto inválido",
     );
 
-Color getTaskStatusColor(String status){
-  switch(status){
-    case "Pendente": return Colors.grey.shade300;
-    case "Em andamento": return Colors.amber.shade700;
-    case "Completa": return Colors.greenAccent.shade400;
-    case "Atrasada": return Colors.red.shade200;
-    default: return Colors.black;
+Color getTaskStatusColor(String status) {
+  switch (status) {
+    case "Pendente":
+      return Colors.grey.shade300;
+    case "Em andamento":
+      return Colors.amber.shade700;
+    case "Completa":
+      return Colors.greenAccent.shade400;
+    case "Atrasada":
+      return Colors.red.shade200;
+    default:
+      return Colors.black;
   }
 }
-  

@@ -17,14 +17,12 @@ class Report extends ConsumerWidget {
     if (project.tasks.isNotEmpty) {
       double totalTime = 0;
       for (var task in project.tasks) {
-        totalTime+=task.spentTime != null? task.spentTime!.inSeconds : 0;
+        totalTime += task.spentTime != null ? task.spentTime!.inSeconds : 0;
       }
-      double sum = 0;
       for (var task in project.tasks) {
         double value = task.spentTime != null
-            ? (task.spentTime!.inSeconds * 100)/totalTime
+            ? (task.spentTime!.inSeconds * 100) / totalTime
             : 0;
-        sum += value;
         dataMap[task.name] = value;
       }
     }
@@ -67,8 +65,7 @@ class Report extends ConsumerWidget {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   project.spentTime != null
-                      ? 
-                      "${project.spentTime!.inHours != 0 ? "${project.spentTime!.inHours} horas " : ""} ${project.spentTime!.inMinutes % 60 != 0 ? "${project.spentTime!.inMinutes % 60} minutos " : ""} ${project.spentTime!.inMinutes == 0 ? "${project.spentTime!.inSeconds} segundos" : ""}"
+                      ? "${project.spentTime!.inHours != 0 ? "${project.spentTime!.inHours} horas " : ""} ${project.spentTime!.inMinutes % 60 != 0 ? "${project.spentTime!.inMinutes % 60} minutos " : ""} ${project.spentTime!.inMinutes == 0 ? "${project.spentTime!.inSeconds} segundos" : ""}"
                       : "",
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
@@ -83,7 +80,8 @@ class Report extends ConsumerWidget {
               if (dataMap.isNotEmpty) ...[
                 PieChart(
                   dataMap: dataMap,
-                  chartValuesOptions: const ChartValuesOptions(showChartValuesInPercentage: true),
+                  chartValuesOptions: const ChartValuesOptions(
+                      showChartValuesInPercentage: true),
                   chartRadius: MediaQuery.of(context).size.width / 4.2,
                 ),
               ],

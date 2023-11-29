@@ -28,25 +28,20 @@ class TaskDetails extends ConsumerWidget {
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
     TaskWatch taskWatchWidget = TaskWatch(task: task, project: project);
 
-    void updateTaskTime(Duration spentTime){
-      task.addSpentTime(spentTime);
-      updateProjectTask(ref,project,task,false);
-    }
-
     return DefaultTabController(
         length: 2,
         child: Scaffold(
           appBar: AppBar(
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back),
-                 onPressed: () {
-                    ref.read(editTaskDetailsProvider.notifier).state = false;
-                    taskWatchWidget.stopAll();
-                    ref.read(watchStateProvider.notifier).state = 0;
-                    ref.read(timeProvider.notifier).state = '00:00';
-                    taskWatchWidget = TaskWatch(task: task, project: project);
-                    Navigator.of(context).pop();
-                 },
+                onPressed: () {
+                  ref.read(editTaskDetailsProvider.notifier).state = false;
+                  taskWatchWidget.stopAll();
+                  ref.read(watchStateProvider.notifier).state = 0;
+                  ref.read(timeProvider.notifier).state = '00:00';
+                  taskWatchWidget = TaskWatch(task: task, project: project);
+                  Navigator.of(context).pop();
+                },
               ),
               title: Text("Tarefa ${task.name}"),
               bottom: const TabBar(tabs: [
@@ -70,7 +65,7 @@ class TaskDetails extends ConsumerWidget {
                     children: [
                       const SizedBox(height: 60),
                       taskWatchWidget,
-                      ],
+                    ],
                   ),
 
                   //--------------------------
@@ -164,17 +159,17 @@ class TaskDetails extends ConsumerWidget {
                                   labelText: 'Prazo',
                                 ))),
                         if (!editTaskDetails) ...[
-                        const SizedBox(height: 30),
-                        SizedBox(
-                            width: 250,
-                            child: TextFormField(
-                                readOnly: true,
-                                controller: TextEditingController(
-                                    text: task.getHourAsText()),
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  labelText: 'Tempo gasto',
-                                ))),
+                          const SizedBox(height: 30),
+                          SizedBox(
+                              width: 250,
+                              child: TextFormField(
+                                  readOnly: true,
+                                  controller: TextEditingController(
+                                      text: task.getHourAsText()),
+                                  decoration: const InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    labelText: 'Tempo gasto',
+                                  ))),
                         ],
                         const SizedBox(height: 30),
                         if (!editTaskDetails) ...[

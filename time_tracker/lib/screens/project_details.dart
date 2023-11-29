@@ -23,9 +23,7 @@ class ProjectDetailsScreen extends ConsumerWidget {
         ref.read(editProjectDetailsProvider.notifier).state;
     List<String> chargeOptions = ["Valor fixo", "Por hora"];
     final deadlineDateController = TextEditingController(
-        text: project.deadlineDate != null
-            ? DateFormat('dd/MM/yyyy').format(project.deadlineDate).toString()
-            : "");
+        text: DateFormat('dd/MM/yyyy').format(project.deadlineDate).toString());
     final deliveryDateController = TextEditingController(
         text: project.deliveryDate != null
             ? DateFormat('dd/MM/yyyy').format(project.deliveryDate!).toString()
@@ -78,8 +76,9 @@ class ProjectDetailsScreen extends ConsumerWidget {
                                           subtitle: Text(project.tasks.elementAt(index).getStatus(),
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold,
-                                                  backgroundColor: getTaskStatusColor(
-                                                      project.tasks
+                                                  backgroundColor:
+                                                      getTaskStatusColor(project
+                                                          .tasks
                                                           .elementAt(index)
                                                           .getStatus()))),
                                           trailing:
@@ -274,7 +273,8 @@ class ProjectDetailsScreen extends ConsumerWidget {
                                               .format(initialDateTime);
                                       project.deliveryDate = initialDateTime;
                                       project.finished = true;
-                                      deliveryDateController.text = formattedDate;
+                                      deliveryDateController.text =
+                                          formattedDate;
                                     } else {
                                       project.finished = false;
                                       project.deliveryDate = null;
@@ -282,33 +282,37 @@ class ProjectDetailsScreen extends ConsumerWidget {
                                   },
                                 )),
                             if (!editProjectDetails) ...[
-                            const SizedBox(height: 30),
-                            SizedBox(
-                                width: 250,
-                                child: TextFormField(
-                                    readOnly: true,
-                                    keyboardType: TextInputType.number,
-                                    validator: (value) {
-                                      if (value != null && value.isNotEmpty) {
-                                        double? aux = double.tryParse(value);
-                                        if (aux != null && aux < 0) {
-                                          return 'Horas inválidas';
+                              const SizedBox(height: 30),
+                              SizedBox(
+                                  width: 250,
+                                  child: TextFormField(
+                                      readOnly: true,
+                                      keyboardType: TextInputType.number,
+                                      validator: (value) {
+                                        if (value != null && value.isNotEmpty) {
+                                          double? aux = double.tryParse(value);
+                                          if (aux != null && aux < 0) {
+                                            return 'Horas inválidas';
+                                          }
+                                          if (aux != null) {
+                                            project.spentTime = Duration(
+                                                hours: aux.toInt(),
+                                                minutes:
+                                                    (aux % 1 * 100).toInt());
+                                          }
                                         }
-                                        if (aux != null){
-                                          project.spentTime = Duration(hours: aux.toInt(), minutes: (aux % 1 * 100).toInt() );
-                                        }
-                                      }
-                                      project.spentTime = Duration.zero;
-                                      return null;
-                                    },
-                                    controller: TextEditingController(
-                                        text: project.spentTime != null
-                                            ?  project.spentTimeAsText() : "Nenhum"),
-                                    decoration: const InputDecoration(
-                                      border: OutlineInputBorder(),
-                                      labelText: 'Tempo gasto',
-                                    ))),
-                          ],
+                                        project.spentTime = Duration.zero;
+                                        return null;
+                                      },
+                                      controller: TextEditingController(
+                                          text: project.spentTime != null
+                                              ? project.spentTimeAsText()
+                                              : "Nenhum"),
+                                      decoration: const InputDecoration(
+                                        border: OutlineInputBorder(),
+                                        labelText: 'Tempo gasto',
+                                      ))),
+                            ],
                           ],
                           const SizedBox(height: 20),
                           if (!editProjectDetails) ...[
@@ -318,7 +322,8 @@ class ProjectDetailsScreen extends ConsumerWidget {
                                 ElevatedButton.icon(
                                   onPressed: () {
                                     ref
-                                        .read(editProjectDetailsProvider.notifier)
+                                        .read(
+                                            editProjectDetailsProvider.notifier)
                                         .state = !editProjectDetails;
                                   },
                                   icon: const Icon(Icons.create_outlined),
@@ -336,18 +341,20 @@ class ProjectDetailsScreen extends ConsumerWidget {
                                 ),
                               ],
                             ),
-                             const SizedBox(height: 20),
-                                ElevatedButton.icon(
-                                    style: ElevatedButton.styleFrom(backgroundColor: Color.fromARGB(255, 193, 161, 67)),
-                                    onPressed: () => {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      Report(project: project)))
-                                        },
-                                    icon: const Icon(Icons.note),
-                                    label: const Text("Exibir Relatório"))
+                            const SizedBox(height: 20),
+                            ElevatedButton.icon(
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: const Color.fromARGB(
+                                        255, 193, 161, 67)),
+                                onPressed: () => {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  Report(project: project)))
+                                    },
+                                icon: const Icon(Icons.note),
+                                label: const Text("Exibir Relatório"))
                           ],
                           if (editProjectDetails) ...[
                             ElevatedButton.icon(
